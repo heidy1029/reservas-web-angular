@@ -1,0 +1,119 @@
+<div class="container mt-4">
+
+  <h2 class="mb-4">Gestión de Sitios</h2>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-header">
+      <h5 class="mb-0">Crear Sitio</h5>
+    </div>
+
+    <div class="card-body">
+
+      <div *ngIf="mensaje" class="alert alert-success">
+        {{ mensaje }}
+      </div>
+
+      <div *ngIf="error" class="alert alert-danger">
+        {{ error }}
+      </div>
+
+      <form (ngSubmit)="guardarSitio()">
+
+        <div class="row">
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Nombre</label>
+            <input
+              type="text"
+              class="form-control"
+              name="nombre"
+              [(ngModel)]="nuevoSitio.nombre"
+              required>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Tipo</label>
+            <input
+              type="text"
+              class="form-control"
+              name="tipo"
+              [(ngModel)]="nuevoSitio.tipo"
+              required>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Ubicación</label>
+            <input
+              type="text"
+              class="form-control"
+              name="ubicacion"
+              [(ngModel)]="nuevoSitio.ubicacion"
+              required>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Capacidad Máxima</label>
+            <input
+              type="number"
+              class="form-control"
+              name="capacidadMaxima"
+              [(ngModel)]="nuevoSitio.capacidadMaxima"
+              required>
+          </div>
+
+          <div class="col-md-12 mb-3">
+            <label class="form-label">Descripción</label>
+            <textarea
+              class="form-control"
+              name="descripcion"
+              [(ngModel)]="nuevoSitio.descripcion">
+            </textarea>
+          </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+          Guardar Sitio
+        </button>
+
+      </form>
+
+    </div>
+  </div>
+
+  <h4>Sitios Registrados</h4>
+
+  <table class="table table-bordered table-striped">
+
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Tipo</th>
+        <th>Ubicación</th>
+        <th>Capacidad</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let sitio of sitios">
+        <td>{{ sitio.id }}</td>
+        <td>{{ sitio.nombre }}</td>
+        <td>{{ sitio.tipo }}</td>
+        <td>{{ sitio.ubicacion }}</td>
+        <td>{{ sitio.capacidadMaxima }}</td>
+        <td>
+          <button (click)="editarSitio(sitio)" class="btn btn-sm btn-outline-primary mr-2">
+            Editar
+          </button>
+          <button (click)="eliminarSitio(sitio.id)" class="btn btn-sm btn-outline-danger">
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+
+  </table>
+
+</div>

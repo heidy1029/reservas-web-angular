@@ -1,0 +1,47 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-5">
+
+      <div class="card shadow">
+        <div class="card-header text-center">
+          <h3>Iniciar Sesión</h3>
+        </div>
+
+        <div class="card-body">
+
+          <div *ngIf="errorMessage" class="alert alert-danger">
+            {{ errorMessage }}
+          </div>
+
+          <form (ngSubmit)="login()">
+
+            <div class="mb-3">
+              <label class="form-label">Correo</label>
+              <input
+                type="email"
+                class="form-control"
+                name="email"
+                [(ngModel)]="model.email">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Contraseña</label>
+              <input
+                type="password"
+                class="form-control"
+                name="password"
+                [(ngModel)]="model.password">
+            </div>
+
+            <button class="btn btn-primary w-100" type="submit">
+              Ingresar
+            </button>
+
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
