@@ -40,3 +40,16 @@
   padding: 30px;
   background: #f8fafc;
 }
+.logout-btn {
+  width: 100%;
+  border: none;
+  background: #dc3545;
+  color: white;
+  padding: 10px;
+  border-radius: 6px;
+  text-align: left;
+}
+
+.logout-btn:hover {
+  background: #bb2d3b;
+}
