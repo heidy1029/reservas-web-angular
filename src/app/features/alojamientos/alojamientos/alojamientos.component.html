@@ -1,0 +1,131 @@
+<div class="container mt-4">
+
+  <h2 class="mb-4">Gestión de Alojamientos</h2>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-header">
+      <h5 class="mb-0">
+        {{ modoEdicion ? 'Editar Alojamiento' : 'Crear Alojamiento' }}
+      </h5>
+    </div>
+
+    <div class="card-body">
+
+      <div *ngIf="mensaje" class="alert alert-success">
+        {{ mensaje }}
+      </div>
+
+      <div *ngIf="error" class="alert alert-danger">
+        {{ error }}
+      </div>
+
+      <form (ngSubmit)="guardarAlojamiento()">
+
+        <div class="row">
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Nombre</label>
+            <input
+              type="text"
+              class="form-control"
+              name="nombre"
+              [(ngModel)]="nuevoAlojamiento.nombre"
+              required>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Tipo</label>
+            <input
+              type="text"
+              class="form-control"
+              name="tipo"
+              [(ngModel)]="nuevoAlojamiento.tipo"
+              required>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Capacidad</label>
+            <input
+              type="number"
+              class="form-control"
+              name="capacidad"
+              [(ngModel)]="nuevoAlojamiento.capacidad"
+              required>
+          </div>
+
+          <div class="col-md-6 mb-3">
+            <label class="form-label">Sitio</label>
+            <select
+              class="form-select"
+              name="sitioId"
+              [(ngModel)]="nuevoAlojamiento.sitioId"
+              required>
+              <option [ngValue]="0">Seleccione...</option>
+              <option
+                *ngFor="let sitio of sitios"
+                [ngValue]="sitio.id">
+                {{ sitio.nombre }}
+              </option>
+            </select>
+          </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+          {{ modoEdicion ? 'Actualizar Alojamiento' : 'Guardar Alojamiento' }}
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-secondary ms-2"
+          *ngIf="modoEdicion"
+          (click)="cancelarEdicion()">
+          Cancelar
+        </button>
+
+      </form>
+
+    </div>
+  </div>
+
+  <h4>Alojamientos Registrados</h4>
+
+  <table class="table table-bordered table-striped">
+
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Tipo</th>
+        <th>Capacidad</th>
+        <th>Sitio</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let alojamiento of alojamientos">
+        <td>{{ alojamiento.id }}</td>
+        <td>{{ alojamiento.nombre }}</td>
+        <td>{{ alojamiento.tipo }}</td>
+        <td>{{ alojamiento.capacidad }}</td>
+        <td>{{ obtenerNombreSitio(alojamiento.sitioId) }}</td>
+        <td>
+          <button
+            class="btn btn-warning btn-sm me-2"
+            (click)="editarAlojamiento(alojamiento)">
+            Editar
+          </button>
+
+          <button
+            class="btn btn-danger btn-sm"
+            (click)="eliminarAlojamiento(alojamiento.id)">
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+
+  </table>
+
+</div>

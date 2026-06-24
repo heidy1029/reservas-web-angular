@@ -1,0 +1,115 @@
+<div class="container mt-4">
+
+  <h2 class="mb-4">Gestión de Temporadas</h2>
+
+  <div class="card shadow-sm mb-4">
+
+    <div class="card-header">
+      <h5 class="mb-0">
+        {{ modoEdicion ? 'Editar Temporada' : 'Crear Temporada' }}
+      </h5>
+    </div>
+
+    <div class="card-body">
+
+      <div *ngIf="mensaje" class="alert alert-success">
+        {{ mensaje }}
+      </div>
+
+      <div *ngIf="error" class="alert alert-danger">
+        {{ error }}
+      </div>
+
+      <form (ngSubmit)="guardarTemporada()">
+
+        <div class="row">
+
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Nombre</label>
+            <input
+              type="text"
+              class="form-control"
+              name="nombre"
+              [(ngModel)]="nuevaTemporada.nombre"
+              required>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Fecha Inicio</label>
+            <input
+              type="date"
+              class="form-control"
+              name="fechaInicio"
+              [(ngModel)]="nuevaTemporada.fechaInicio"
+              required>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Fecha Fin</label>
+            <input
+              type="date"
+              class="form-control"
+              name="fechaFin"
+              [(ngModel)]="nuevaTemporada.fechaFin"
+              required>
+          </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+          {{ modoEdicion ? 'Actualizar Temporada' : 'Guardar Temporada' }}
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-secondary ms-2"
+          *ngIf="modoEdicion"
+          (click)="cancelarEdicion()">
+          Cancelar
+        </button>
+
+      </form>
+
+    </div>
+
+  </div>
+
+  <h4>Temporadas Registradas</h4>
+
+  <table class="table table-bordered table-striped">
+
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Nombre</th>
+        <th>Fecha Inicio</th>
+        <th>Fecha Fin</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let temporada of temporadas">
+        <td>{{ temporada.id }}</td>
+        <td>{{ temporada.nombre }}</td>
+        <td>{{ temporada.fechaInicio | date:'yyyy-MM-dd' }}</td>
+        <td>{{ temporada.fechaFin | date:'yyyy-MM-dd' }}</td>
+        <td>
+          <button
+            class="btn btn-warning btn-sm me-2"
+            (click)="editarTemporada(temporada)">
+            Editar
+          </button>
+
+          <button
+            class="btn btn-danger btn-sm"
+            (click)="eliminarTemporada(temporada.id)">
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+
+  </table>
+
+</div>

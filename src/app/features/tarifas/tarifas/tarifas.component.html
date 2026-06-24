@@ -1,0 +1,127 @@
+<div class="container mt-4">
+
+  <h2 class="mb-4">Gestión de Tarifas</h2>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-header">
+      <h5 class="mb-0">
+        {{ modoEdicion ? 'Editar Tarifa' : 'Crear Tarifa' }}
+      </h5>
+    </div>
+
+    <div class="card-body">
+
+      <div *ngIf="mensaje" class="alert alert-success">
+        {{ mensaje }}
+      </div>
+
+      <div *ngIf="error" class="alert alert-danger">
+        {{ error }}
+      </div>
+
+      <form (ngSubmit)="guardarTarifa()">
+
+        <div class="row">
+
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Sitio</label>
+            <select class="form-select" name="sitioId" [(ngModel)]="nuevaTarifa.sitioId">
+              <option [ngValue]="0">Seleccione...</option>
+              <option *ngFor="let sitio of sitios" [ngValue]="sitio.id">
+                {{ sitio.nombre }}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Alojamiento</label>
+            <select class="form-select" name="alojamientoId" [(ngModel)]="nuevaTarifa.alojamientoId">
+              <option [ngValue]="null">General</option>
+              <option *ngFor="let alojamiento of alojamientos" [ngValue]="alojamiento.id">
+                {{ alojamiento.nombre }}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-md-4 mb-3">
+            <label class="form-label">Temporada</label>
+            <select class="form-select" name="temporadaId" [(ngModel)]="nuevaTarifa.temporadaId">
+              <option [ngValue]="0">Seleccione...</option>
+              <option *ngFor="let temporada of temporadas" [ngValue]="temporada.id">
+                {{ temporada.nombre }}
+              </option>
+            </select>
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Personas Desde</label>
+            <input type="number" class="form-control" name="desde" [(ngModel)]="nuevaTarifa.numeroPersonasDesde">
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Personas Hasta</label>
+            <input type="number" class="form-control" name="hasta" [(ngModel)]="nuevaTarifa.numeroPersonasHasta">
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Valor Noche</label>
+            <input type="number" class="form-control" name="valorNoche" [(ngModel)]="nuevaTarifa.valorNoche">
+          </div>
+
+          <div class="col-md-3 mb-3">
+            <label class="form-label">Valor Persona Adicional</label>
+            <input type="number" class="form-control" name="valorPersonaAdicional" [(ngModel)]="nuevaTarifa.valorPersonaAdicional">
+          </div>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary">
+          {{ modoEdicion ? 'Actualizar Tarifa' : 'Guardar Tarifa' }}
+        </button>
+
+        <button type="button" class="btn btn-secondary ms-2" *ngIf="modoEdicion" (click)="cancelarEdicion()">
+          Cancelar
+        </button>
+
+      </form>
+
+    </div>
+  </div>
+
+  <h4>Tarifas Registradas</h4>
+
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>Sitio</th>
+        <th>Alojamiento</th>
+        <th>Temporada</th>
+        <th>Personas</th>
+        <th>Valor Noche</th>
+        <th>Adicional</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let tarifa of tarifas">
+        <td>{{ tarifa.sitio }}</td>
+        <td>{{ tarifa.alojamiento }}</td>
+        <td>{{ tarifa.temporada }}</td>
+        <td>{{ tarifa.numeroPersonasDesde }} - {{ tarifa.numeroPersonasHasta }}</td>
+        <td>{{ tarifa.valorNoche | currency:'COP':'symbol':'1.0-0' }}</td>
+        <td>{{ tarifa.valorPersonaAdicional | currency:'COP':'symbol':'1.0-0' }}</td>
+        <td>
+          <button class="btn btn-warning btn-sm me-2" (click)="editarTarifa(tarifa)">
+            Editar
+          </button>
+
+          <button class="btn btn-danger btn-sm" (click)="eliminarTarifa(tarifa.id)">
+            Eliminar
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
