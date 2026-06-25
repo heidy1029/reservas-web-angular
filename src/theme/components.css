@@ -1,0 +1,57 @@
+.er-card {
+  background: var(--er-surface);
+  border: 1px solid var(--er-border);
+  border-radius: 14px;
+  box-shadow: var(--er-shadow);
+}
+
+.er-page-title {
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.er-page-subtitle {
+  font-size: 14px;
+  color: var(--er-muted);
+}
+
+.er-btn-primary {
+  background: var(--er-primary);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-weight: 600;
+}
+
+.er-btn-primary:hover {
+  background: var(--er-primary-dark);
+}
+
+.er-badge-success {
+  background: var(--er-success-soft);
+  color: var(--er-success);
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.er-badge-warning {
+  background: var(--er-warning-soft);
+  color: var(--er-warning);
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.er-badge-danger {
+  background: var(--er-danger-soft);
+  color: var(--er-danger);
+  border-radius: 999px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 700;
+}

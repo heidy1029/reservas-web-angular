@@ -1,0 +1,7 @@
+.er-shadow-sm {
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+}
+
+.er-shadow-md {
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+}

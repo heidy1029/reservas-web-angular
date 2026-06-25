@@ -1,0 +1,8 @@
+.er-section {
+  margin-bottom: 24px;
+}
+
+.er-grid {
+  display: grid;
+  gap: 20px;
+}

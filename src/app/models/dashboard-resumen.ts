@@ -6,4 +6,14 @@ export interface DashboardResumen {
 
   totalReservas: number;
 
+  ingresosMes: number;
+
+  reservasPendientes: number;
+
+  reservasConfirmadas: number;
+
+  llegadasHoy: number;
+
+  salidasHoy: number;
+
 }
