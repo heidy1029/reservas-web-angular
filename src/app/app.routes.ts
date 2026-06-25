@@ -7,6 +7,8 @@ import { DashboardComponent } from './features/dashboard/dashboard/dashboard.com
 import { AlojamientosComponent } from './features/alojamientos/alojamientos/alojamientos.component';
 import { TemporadasComponent } from './features/temporadas/temporadas/temporadas.component';
 import { TarifasComponent } from './features/tarifas/tarifas/tarifas.component';
+import { ReservasComponent } from './features/reservas/reservas/reservas.component';
+import { ReservaDetalleComponent } from './features/reservas/reserva-detalle/reserva-detalle.component';
 
 
 export const routes: Routes = [
@@ -48,6 +50,14 @@ export const routes: Routes = [
 {
   path: 'tarifas',
   component: TarifasComponent
+},
+{
+  path: 'reservas',
+  component: ReservasComponent
+},
+{
+  path: 'reservas/:id',
+  component: ReservaDetalleComponent
 }
 
 ]

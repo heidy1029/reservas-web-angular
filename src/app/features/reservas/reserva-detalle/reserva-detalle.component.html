@@ -1,0 +1,50 @@
+<div class="container mt-4">
+
+  <a routerLink="/reservas" class="btn btn-secondary mb-3">
+    Volver
+  </a>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <div *ngIf="reserva" class="card shadow-sm">
+
+    <div class="card-header">
+      <h4>Reserva #{{ reserva.id }}</h4>
+    </div>
+
+    <div class="card-body">
+
+      <h5>Datos del Huésped</h5>
+
+      <p><strong>Nombre:</strong> {{ reserva.huesped }}</p>
+      <p><strong>Documento:</strong> {{ reserva.documentoHuesped }}</p>
+      <p><strong>Teléfono:</strong> {{ reserva.telefonoHuesped }}</p>
+      <p><strong>Correo:</strong> {{ reserva.correoHuesped }}</p>
+
+      <hr>
+
+      <h5>Datos de la Reserva</h5>
+
+      <p><strong>Sitio:</strong> {{ reserva.sitio }}</p>
+      <p><strong>Alojamiento:</strong> {{ reserva.alojamiento }}</p>
+      <p><strong>Fecha Reserva:</strong> {{ reserva.fechaReserva | date:'yyyy-MM-dd HH:mm' }}</p>
+      <p><strong>Llegada:</strong> {{ reserva.fechaLlegada | date:'yyyy-MM-dd' }}</p>
+      <p><strong>Salida:</strong> {{ reserva.fechaSalida | date:'yyyy-MM-dd' }}</p>
+      <p><strong>Personas:</strong> {{ reserva.numeroPersonas }}</p>
+      <p><strong>Habitaciones:</strong> {{ reserva.numeroHabitaciones }}</p>
+
+      <hr>
+
+      <h5>Valores</h5>
+
+      <p><strong>Valor Noche:</strong> {{ reserva.valorNoche | currency:'COP':'symbol':'1.0-0' }}</p>
+      <p><strong>Total:</strong> {{ reserva.valorTotal | currency:'COP':'symbol':'1.0-0' }}</p>
+      <p><strong>Estado:</strong> {{ reserva.estado }}</p>
+
+    </div>
+
+  </div>
+
+</div>

@@ -1,0 +1,50 @@
+<div class="container mt-4">
+
+  <h2 class="mb-4">Reservas</h2>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <table class="table table-bordered table-striped">
+
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Huésped</th>
+      <th>Sitio</th>
+      <th>Llegada</th>
+      <th>Salida</th>
+      <th>Personas</th>
+      <th>Total</th>
+      <th>Estado</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let reserva of reservas">
+      <td>{{ reserva.id }}</td>
+      <td>{{ reserva.huesped }}</td>
+      <td>{{ reserva.sitio }}</td>
+      <td>{{ reserva.fechaLlegada | date:'yyyy-MM-dd' }}</td>
+      <td>{{ reserva.fechaSalida | date:'yyyy-MM-dd' }}</td>
+      <td>{{ reserva.personas }}</td>
+      <td>{{ reserva.valorTotal | currency:'COP':'symbol':'1.0-0' }}</td>
+      <td>
+        <span class="badge bg-warning text-dark">
+          {{ reserva.estado }}
+        </span>
+      </td>
+      <td>
+        <a class="btn btn-info btn-sm"
+           [routerLink]="['/reservas', reserva.id]">
+          Ver
+        </a>
+      </td>
+    </tr>
+  </tbody>
+
+</table>
+
+</div>

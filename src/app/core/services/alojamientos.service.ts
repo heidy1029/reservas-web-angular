@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { Alojamiento } from '../../models/alojamiento';
 import { AlojamientoCreate } from '../../models/alojamiento-create';
+import { ReservaDetalle } from '../../models/reserva-detalle';
 
 @Injectable({
   providedIn: 'root'
@@ -38,4 +39,5 @@ export class AlojamientosService {
       `${environment.apiUrl}/Alojamientos/${id}`
     );
   }
+
 }
