@@ -19,16 +19,26 @@ import { ReservaMensual } from '../../../models/reserva-mensual';
 })
 export class DashboardComponent implements OnInit {
 
-  resumen: DashboardResumen = {
-    totalSitios: 0,
-    totalAlojamientos: 0,
-    totalReservas: 0,
-    ingresosMes: 0,
-    reservasPendientes: 0,
-    reservasConfirmadas: 0,
-    llegadasHoy: 0,
-    salidasHoy: 0
-  };
+ resumen: DashboardResumen = {
+
+  totalSitios: 0,
+  totalAlojamientos: 0,
+  totalReservas: 0,
+
+  ingresosMes: 0,
+
+  reservasPendientes: 0,
+  reservasConfirmadas: 0,
+  llegadasHoy: 0,
+  salidasHoy: 0,
+
+  sitiosMes: 0,
+  alojamientosMes: 0,
+
+  porcentajeReservasMes: 0,
+  porcentajeIngresosMes: 0
+
+};
   barChartData: ChartConfiguration<'bar'>['data'] = {
   labels: [],
   datasets: [

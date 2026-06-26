@@ -87,3 +87,105 @@
   background: var(--er-danger-soft);
   color: var(--er-danger);
 }
+.er-stat-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:15px;
+
+}
+
+.er-growth{
+
+    font-size:13px;
+
+    font-weight:700;
+
+    padding:6px 10px;
+
+    border-radius:30px;
+
+}
+
+.er-growth.positive{
+
+    background:#EAFBF2;
+
+    color:#17a34a;
+
+}
+
+.er-growth.negative{
+
+    background:#FDECEC;
+
+    color:#dc3545;
+
+}
+.er-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-top: 18px;
+}
+
+.er-mini-card {
+  border-radius: 18px;
+  padding: 14px;
+  text-align: center;
+  transition: .25s ease;
+}
+
+.er-mini-card:hover {
+  transform: translateY(-4px);
+}
+
+.er-mini-card i {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.er-mini-card span {
+  display: block;
+  color: #6b7280;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.er-mini-card strong {
+  display: block;
+  margin-top: 8px;
+  font-size: 26px;
+  font-weight: 800;
+}
+
+.er-mini-card.warning {
+  background: #fff8e6;
+  color: #f59e0b;
+}
+
+.er-mini-card.success {
+  background: #ecfdf3;
+  color: #10b981;
+}
+
+.er-mini-card.info {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.er-mini-card.orange {
+  background: #fff3e8;
+  color: #ea580c;
+}
+.er-mini-card:hover{
+
+transform:translateY(-5px);
+
+box-shadow:0 18px 35px rgba(0,0,0,.12);
+
+}

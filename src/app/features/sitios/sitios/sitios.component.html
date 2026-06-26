@@ -1,27 +1,38 @@
-<div class="container mt-4">
+<div class="er-sitios">
 
-  <h2 class="mb-4">Gestión de Sitios</h2>
+  <div class="er-page-header">
 
-  <div class="card shadow-sm mb-4">
-    <div class="card-header">
-      <h5 class="mb-0">Crear Sitio</h5>
+    <div>
+      <h1 class="er-page-title">Gestión de Sitios</h1>
+      <p class="er-page-subtitle">
+        Administra las sedes, centros vacacionales y ubicaciones disponibles.
+      </p>
     </div>
 
-    <div class="card-body">
+  </div>
 
-      <div *ngIf="mensaje" class="alert alert-success">
-        {{ mensaje }}
-      </div>
+  <div *ngIf="mensaje" class="alert alert-success">
+    {{ mensaje }}
+  </div>
 
-      <div *ngIf="error" class="alert alert-danger">
-        {{ error }}
-      </div>
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
 
-      <form (ngSubmit)="guardarSitio()">
+  <div class="row g-4">
 
-        <div class="row">
+    <div class="col-lg-5">
 
-          <div class="col-md-6 mb-3">
+      <div class="er-card p-4 h-100">
+
+        <h4 class="er-section-title">
+          <i class="fa-solid fa-map-location-dot"></i>
+          {{ modoEdicion ? 'Editar Sitio' : 'Crear Sitio' }}
+        </h4>
+
+        <form class="mt-4" (ngSubmit)="guardarSitio()">
+
+          <div class="mb-3">
             <label class="form-label">Nombre</label>
             <input
               type="text"
@@ -31,7 +42,7 @@
               required>
           </div>
 
-          <div class="col-md-6 mb-3">
+          <div class="mb-3">
             <label class="form-label">Tipo</label>
             <input
               type="text"
@@ -41,7 +52,7 @@
               required>
           </div>
 
-          <div class="col-md-6 mb-3">
+          <div class="mb-3">
             <label class="form-label">Ubicación</label>
             <input
               type="text"
@@ -51,7 +62,7 @@
               required>
           </div>
 
-          <div class="col-md-6 mb-3">
+          <div class="mb-3">
             <label class="form-label">Capacidad Máxima</label>
             <input
               type="number"
@@ -61,59 +72,137 @@
               required>
           </div>
 
-          <div class="col-md-12 mb-3">
+          <div class="mb-3">
             <label class="form-label">Descripción</label>
             <textarea
               class="form-control"
+              rows="4"
               name="descripcion"
               [(ngModel)]="nuevoSitio.descripcion">
             </textarea>
           </div>
 
-        </div>
+          <div class="d-flex gap-2">
 
-        <button type="submit" class="btn btn-primary">
-          Guardar Sitio
-        </button>
+            <button type="submit" class="er-btn-primary">
+              <i class="fa-solid fa-floppy-disk"></i>
+              {{ modoEdicion ? 'Actualizar Sitio' : 'Guardar Sitio' }}
+            </button>
 
-      </form>
+            <button
+              *ngIf="modoEdicion"
+              type="button"
+              class="er-btn-secondary"
+              (click)="cancelarEdicion()">
+              Cancelar
+            </button>
+
+          </div>
+
+        </form>
+
+      </div>
 
     </div>
+
+    <div class="col-lg-7">
+
+      <div class="er-card p-4 mb-4">
+
+        <div class="er-sitios-kpis">
+
+          <div class="er-kpi-mini">
+            <i class="fa-solid fa-location-dot"></i>
+            <div>
+              <span>Total sitios</span>
+              <strong>{{ sitios.length }}</strong>
+            </div>
+          </div>
+
+          <div class="er-kpi-mini">
+            <i class="fa-solid fa-users"></i>
+            <div>
+              <span>Capacidad total</span>
+              <strong>{{ obtenerCapacidadTotal() }}</strong>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="er-card p-0">
+
+        <table class="table er-table mb-0">
+
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Sitio</th>
+              <th>Tipo</th>
+              <th>Ubicación</th>
+              <th>Capacidad</th>
+              <th class="text-end">Acciones</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let sitio of sitios">
+
+              <td>
+                <strong>#{{ sitio.id }}</strong>
+              </td>
+
+              <td>
+                <div class="er-site-cell">
+                  <div class="er-site-icon">
+                    <i class="fa-solid fa-building"></i>
+                  </div>
+
+                  <div>
+                    <strong>{{ sitio.nombre }}</strong>
+                    <small>{{ sitio.descripcion || 'Sin descripción' }}</small>
+                  </div>
+                </div>
+              </td>
+
+              <td>{{ sitio.tipo }}</td>
+
+              <td>{{ sitio.ubicacion }}</td>
+
+              <td>
+                <strong>{{ sitio.capacidadMaxima }}</strong>
+              </td>
+
+              <td class="text-end">
+
+                <button
+                  type="button"
+                  class="btn btn-light btn-sm"
+                  (click)="editarSitio(sitio)">
+                  <i class="fa-solid fa-pen"></i>
+                  Editar
+                </button>
+
+                <button
+                  type="button"
+                  class="btn btn-light btn-sm ms-2"
+                  (click)="eliminarSitio(sitio.id)">
+                  <i class="fa-solid fa-trash"></i>
+                  Eliminar
+                </button>
+
+              </td>
+
+            </tr>
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
   </div>
-
-  <h4>Sitios Registrados</h4>
-
-  <table class="table table-bordered table-striped">
-
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Tipo</th>
-        <th>Ubicación</th>
-        <th>Capacidad</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr *ngFor="let sitio of sitios">
-        <td>{{ sitio.id }}</td>
-        <td>{{ sitio.nombre }}</td>
-        <td>{{ sitio.tipo }}</td>
-        <td>{{ sitio.ubicacion }}</td>
-        <td>{{ sitio.capacidadMaxima }}</td>
-        <td>
-          <button (click)="editarSitio(sitio)" class="btn btn-sm btn-outline-primary mr-2">
-            Editar
-          </button>
-          <button (click)="eliminarSitio(sitio.id)" class="btn btn-sm btn-outline-danger">
-            Eliminar
-          </button>
-        </td>
-      </tr>
-    </tbody>
-
-  </table>
 
 </div>

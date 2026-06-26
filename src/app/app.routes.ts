@@ -9,7 +9,7 @@ import { TemporadasComponent } from './features/temporadas/temporadas/temporadas
 import { TarifasComponent } from './features/tarifas/tarifas/tarifas.component';
 import { ReservasComponent } from './features/reservas/reservas/reservas.component';
 import { ReservaDetalleComponent } from './features/reservas/reserva-detalle/reserva-detalle.component';
-
+import { NuevaReservaComponent } from './features/reservas/nueva-reserva/nueva-reserva.component';
 
 export const routes: Routes = [
 
@@ -54,6 +54,10 @@ export const routes: Routes = [
 {
   path: 'reservas',
   component: ReservasComponent
+},
+{
+  path: 'reservas/nueva',
+  component: NuevaReservaComponent
 },
 {
   path: 'reservas/:id',

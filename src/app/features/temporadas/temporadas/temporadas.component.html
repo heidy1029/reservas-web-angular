@@ -1,30 +1,38 @@
-<div class="container mt-4">
+<div class="er-temporadas">
 
-  <h2 class="mb-4">Gestión de Temporadas</h2>
+  <div class="er-page-header">
 
-  <div class="card shadow-sm mb-4">
-
-    <div class="card-header">
-      <h5 class="mb-0">
-        {{ modoEdicion ? 'Editar Temporada' : 'Crear Temporada' }}
-      </h5>
+    <div>
+      <h1 class="er-page-title">Gestión de Temporadas</h1>
+      <p class="er-page-subtitle">
+        Define los rangos de fechas para temporadas altas, bajas y especiales.
+      </p>
     </div>
 
-    <div class="card-body">
+  </div>
 
-      <div *ngIf="mensaje" class="alert alert-success">
-        {{ mensaje }}
-      </div>
+  <div *ngIf="mensaje" class="alert alert-success">
+    {{ mensaje }}
+  </div>
 
-      <div *ngIf="error" class="alert alert-danger">
-        {{ error }}
-      </div>
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
 
-      <form (ngSubmit)="guardarTemporada()">
+  <div class="row g-4">
 
-        <div class="row">
+    <div class="col-lg-5">
 
-          <div class="col-md-4 mb-3">
+      <div class="er-card p-4 h-100">
+
+        <h4 class="er-section-title">
+          <i class="fa-solid fa-calendar-days"></i>
+          {{ modoEdicion ? 'Editar Temporada' : 'Crear Temporada' }}
+        </h4>
+
+        <form class="mt-4" (ngSubmit)="guardarTemporada()">
+
+          <div class="mb-3">
             <label class="form-label">Nombre</label>
             <input
               type="text"
@@ -34,8 +42,8 @@
               required>
           </div>
 
-          <div class="col-md-4 mb-3">
-            <label class="form-label">Fecha Inicio</label>
+          <div class="mb-3">
+            <label class="form-label">Fecha inicio</label>
             <input
               type="date"
               class="form-control"
@@ -44,8 +52,8 @@
               required>
           </div>
 
-          <div class="col-md-4 mb-3">
-            <label class="form-label">Fecha Fin</label>
+          <div class="mb-3">
+            <label class="form-label">Fecha fin</label>
             <input
               type="date"
               class="form-control"
@@ -54,62 +62,124 @@
               required>
           </div>
 
+          <div class="d-flex gap-2 mt-4">
+
+            <button type="submit" class="er-btn-primary">
+              <i class="fa-solid fa-floppy-disk"></i>
+              {{ modoEdicion ? 'Actualizar' : 'Guardar' }}
+            </button>
+
+            <button
+              type="button"
+              class="er-btn-secondary"
+              *ngIf="modoEdicion"
+              (click)="cancelarEdicion()">
+              Cancelar
+            </button>
+
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+
+    <div class="col-lg-7">
+
+      <div class="er-card p-4 mb-4">
+
+        <div class="er-temporadas-kpis">
+
+          <div class="er-kpi-mini">
+            <i class="fa-solid fa-calendar-check"></i>
+            <div>
+              <span>Total temporadas</span>
+              <strong>{{ temporadas.length }}</strong>
+            </div>
+          </div>
+
+          <div class="er-kpi-mini">
+            <i class="fa-solid fa-circle-check"></i>
+            <div>
+              <span>Activas hoy</span>
+              <strong>{{ obtenerTemporadasActivas() }}</strong>
+            </div>
+          </div>
+
         </div>
 
-        <button type="submit" class="btn btn-primary">
-          {{ modoEdicion ? 'Actualizar Temporada' : 'Guardar Temporada' }}
-        </button>
+      </div>
 
-        <button
-          type="button"
-          class="btn btn-secondary ms-2"
-          *ngIf="modoEdicion"
-          (click)="cancelarEdicion()">
-          Cancelar
-        </button>
+      <div class="er-temporadas-grid">
 
-      </form>
+        <div
+          class="er-temporada-card"
+          *ngFor="let temporada of temporadas">
+
+          <div class="er-temporada-icon">
+            <i class="fa-solid fa-calendar-days"></i>
+          </div>
+
+          <div class="er-temporada-body">
+
+            <div class="d-flex justify-content-between align-items-start gap-2">
+
+              <div>
+                <h5>{{ temporada.nombre }}</h5>
+                <p class="er-muted mb-0">
+                  {{ calcularDiasTemporada(temporada) }} días configurados
+                </p>
+              </div>
+
+              <span class="er-status confirmed">
+                Activa
+              </span>
+
+            </div>
+
+            <div class="er-temporada-dates mt-4">
+
+              <div>
+                <span>Inicio</span>
+                <strong>{{ temporada.fechaInicio | date:'dd/MM/yyyy' }}</strong>
+              </div>
+
+              <div>
+                <span>Fin</span>
+                <strong>{{ temporada.fechaFin | date:'dd/MM/yyyy' }}</strong>
+              </div>
+
+            </div>
+
+            <div class="d-flex gap-2 mt-4">
+
+              <button
+                type="button"
+                class="er-btn-secondary w-100"
+                (click)="editarTemporada(temporada)">
+                <i class="fa-solid fa-pen"></i>
+                Editar
+              </button>
+
+              <button
+                type="button"
+                class="er-btn-secondary w-100"
+                (click)="eliminarTemporada(temporada.id)">
+                <i class="fa-solid fa-trash"></i>
+                Eliminar
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
 
     </div>
 
   </div>
-
-  <h4>Temporadas Registradas</h4>
-
-  <table class="table table-bordered table-striped">
-
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Fecha Inicio</th>
-        <th>Fecha Fin</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      <tr *ngFor="let temporada of temporadas">
-        <td>{{ temporada.id }}</td>
-        <td>{{ temporada.nombre }}</td>
-        <td>{{ temporada.fechaInicio | date:'yyyy-MM-dd' }}</td>
-        <td>{{ temporada.fechaFin | date:'yyyy-MM-dd' }}</td>
-        <td>
-          <button
-            class="btn btn-warning btn-sm me-2"
-            (click)="editarTemporada(temporada)">
-            Editar
-          </button>
-
-          <button
-            class="btn btn-danger btn-sm"
-            (click)="eliminarTemporada(temporada.id)">
-            Eliminar
-          </button>
-        </td>
-      </tr>
-    </tbody>
-
-  </table>
 
 </div>

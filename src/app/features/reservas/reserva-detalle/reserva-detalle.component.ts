@@ -23,6 +23,10 @@ export class ReservaDetalleComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.cargarReserva();
+  }
+
+  private cargarReserva(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
 
     this.reservasService.getById(id).subscribe({
@@ -34,4 +38,38 @@ export class ReservaDetalleComponent implements OnInit {
       }
     });
   }
+
+  confirmarReserva(): void {
+    if (!this.reserva) return;
+
+  this.reservasService.confirmarReserva(this.reserva.id).subscribe({
+    next: () => {
+      this.cargarReserva();
+    },
+    error: () => {
+      this.error = 'Error al confirmar la reserva.';
+    }
+  });
+}
+
+cancelarReserva(): void {
+  if (!this.reserva) return;
+
+  const confirmar = confirm('¿Está seguro de cancelar esta reserva?');
+
+  if (!confirmar) return;
+
+  this.reservasService.cancelarReserva(this.reserva.id).subscribe({
+    next: () => {
+      this.cargarReserva();
+    },
+    error: () => {
+      this.error = 'Error al cancelar la reserva.';
+    }
+  });
+}
+
+imprimir(): void {
+  window.print();
+}
 }

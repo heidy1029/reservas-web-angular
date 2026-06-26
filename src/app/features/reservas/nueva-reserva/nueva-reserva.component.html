@@ -1,0 +1,351 @@
+<div class="er-new-reservation">
+
+  <div class="er-page-header">
+    <div>
+      <h1 class="er-page-title">Nueva Reserva</h1>
+      <p class="er-page-subtitle">
+        Consulta disponibilidad, selecciona alojamiento y confirma la reserva.
+      </p>
+    </div>
+
+    <a routerLink="/reservas" class="er-btn-secondary">
+      <i class="fa-solid fa-arrow-left"></i>
+      Volver
+    </a>
+  </div>
+
+  <div class="er-card p-4 mb-4">
+    <div class="er-steps">
+
+      <div class="er-step" [class.active]="pasoActual >= 1">
+        <span>1</span>
+        <strong>Disponibilidad</strong>
+      </div>
+
+      <div class="er-step" [class.active]="pasoActual >= 2">
+        <span>2</span>
+        <strong>Huésped</strong>
+      </div>
+
+      <div class="er-step" [class.active]="pasoActual >= 3">
+        <span>3</span>
+        <strong>Confirmación</strong>
+      </div>
+
+      <div class="er-step" [class.active]="pasoActual >= 4">
+        <span>4</span>
+        <strong>Finalizado</strong>
+      </div>
+
+    </div>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <!-- PASO 1 -->
+  <div class="er-card p-4" *ngIf="pasoActual === 1">
+
+    <h4 class="mb-3">
+      <i class="fa-solid fa-magnifying-glass-location"></i>
+      Buscar Disponibilidad
+    </h4>
+
+    <div class="row g-3">
+
+      <div class="col-md-4">
+        <label class="form-label">Sitio</label>
+        <select class="form-select" [(ngModel)]="reserva.sitioId">
+          <option value="">Seleccione un sitio</option>
+          <option *ngFor="let sitio of sitios" [value]="sitio.id">
+            {{ sitio.nombre }}
+          </option>
+        </select>
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label">Fecha llegada</label>
+        <input type="date" class="form-control" [(ngModel)]="reserva.fechaLlegada">
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label">Fecha salida</label>
+        <input type="date" class="form-control" [(ngModel)]="reserva.fechaSalida">
+      </div>
+
+      <div class="col-md-2">
+        <label class="form-label">Personas</label>
+        <input type="number" class="form-control" min="1" [(ngModel)]="reserva.numeroPersonas">
+      </div>
+
+    </div>
+
+    <div class="mt-4 d-flex justify-content-end">
+      <button class="er-btn-primary" (click)="buscarDisponibilidad()">
+        <i class="fa-solid fa-search"></i>
+        {{ buscando ? 'Buscando...' : 'Buscar disponibilidad' }}
+      </button>
+    </div>
+
+  </div>
+
+  <!-- ALOJAMIENTOS DISPONIBLES -->
+  <div *ngIf="pasoActual === 1 && alojamientosDisponibles.length > 0" class="mt-4">
+
+    <h3 class="mb-3">Alojamientos Disponibles</h3>
+
+    <div class="er-alojamientos-grid">
+
+      <div
+        class="er-alojamiento-card"
+        [class.selected]="alojamientoSeleccionado?.id === alojamiento.id"
+        *ngFor="let alojamiento of alojamientosDisponibles">
+
+        <div class="er-alojamiento-image">
+          <i class="fa-solid fa-house-chimney-window"></i>
+        </div>
+
+        <div class="p-3">
+
+          <span class="er-status confirmed">
+            Disponible
+          </span>
+
+          <h5 class="mt-3">{{ alojamiento.nombre }}</h5>
+
+          <p class="text-muted mb-2">
+            {{ alojamiento.tipo }}
+          </p>
+
+          <p>
+            <i class="fa-solid fa-users"></i>
+            Capacidad: {{ alojamiento.capacidad }} personas
+          </p>
+
+          <button
+            class="er-btn-primary w-100"
+            (click)="seleccionarAlojamiento(alojamiento)">
+            <i class="fa-solid fa-check"></i>
+            Seleccionar
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="mt-4 d-flex justify-content-end" *ngIf="alojamientoSeleccionado">
+      <button class="er-btn-primary" (click)="siguientePaso()">
+        Continuar
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- PASO 2 -->
+  <div class="er-card p-4 mt-4" *ngIf="pasoActual === 2">
+
+    <h4 class="mb-3">
+      <i class="fa-solid fa-user"></i>
+      Datos del Huésped
+    </h4>
+
+    <div class="row g-3">
+
+      <div class="col-md-6">
+        <label class="form-label">Nombre completo</label>
+        <input type="text" class="form-control" [(ngModel)]="reserva.nombreHuesped">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Documento</label>
+        <input type="text" class="form-control" [(ngModel)]="reserva.documentoHuesped">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Teléfono</label>
+        <input type="text" class="form-control" [(ngModel)]="reserva.telefonoHuesped">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Correo</label>
+        <input type="email" class="form-control" [(ngModel)]="reserva.correoHuesped">
+      </div>
+
+    </div>
+
+    <div class="mt-4 d-flex justify-content-between">
+      <button class="er-btn-secondary" (click)="anteriorPaso()">
+        <i class="fa-solid fa-arrow-left"></i>
+        Atrás
+      </button>
+
+      <button class="er-btn-primary" (click)="siguientePaso()">
+        Continuar
+        <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- PASO 3 -->
+  <div class="er-card p-4 mt-4" *ngIf="pasoActual === 3">
+
+    <h4 class="mb-4">
+      <i class="fa-solid fa-clipboard-check"></i>
+      Confirmación de Reserva
+    </h4>
+
+    <div class="row g-4">
+
+      <div class="col-lg-8">
+
+        <div class="er-confirm-section">
+          <h5>Datos de la reserva</h5>
+
+          <div class="er-confirm-grid">
+
+            <div>
+              <span>Sitio</span>
+              <strong>{{ obtenerNombreSitio() }}</strong>
+            </div>
+
+            <div>
+              <span>Alojamiento</span>
+              <strong>{{ alojamientoSeleccionado?.nombre }}</strong>
+            </div>
+
+            <div>
+              <span>Fecha llegada</span>
+              <strong>{{ reserva.fechaLlegada | date:'dd/MM/yyyy' }}</strong>
+            </div>
+
+            <div>
+              <span>Fecha salida</span>
+              <strong>{{ reserva.fechaSalida | date:'dd/MM/yyyy' }}</strong>
+            </div>
+
+            <div>
+              <span>Noches</span>
+              <strong>{{ calcularNoches() }}</strong>
+            </div>
+
+            <div>
+              <span>Personas</span>
+              <strong>{{ reserva.numeroPersonas }}</strong>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="er-confirm-section mt-4">
+          <h5>Datos del huésped</h5>
+
+          <div class="er-confirm-grid">
+
+            <div>
+              <span>Nombre</span>
+              <strong>{{ reserva.nombreHuesped }}</strong>
+            </div>
+
+            <div>
+              <span>Documento</span>
+              <strong>{{ reserva.documentoHuesped }}</strong>
+            </div>
+
+            <div>
+              <span>Teléfono</span>
+              <strong>{{ reserva.telefonoHuesped }}</strong>
+            </div>
+
+            <div>
+              <span>Correo</span>
+              <strong>{{ reserva.correoHuesped }}</strong>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-lg-4">
+        <div class="er-summary-box">
+
+          <h5>Resumen</h5>
+
+          <div class="er-summary-line">
+            <span>Noches</span>
+            <strong>{{ calcularNoches() }}</strong>
+          </div>
+
+          <div class="er-summary-line">
+            <span>Personas</span>
+            <strong>{{ reserva.numeroPersonas }}</strong>
+          </div>
+
+          <div class="er-summary-line">
+            <span>Alojamiento</span>
+            <strong>{{ alojamientoSeleccionado?.nombre }}</strong>
+          </div>
+
+          <hr>
+
+          <div class="er-summary-total">
+            <span>Estado inicial</span>
+            <strong>Pendiente</strong>
+          </div>
+
+          <small class="text-muted d-block mt-3">
+            La reserva será creada en estado pendiente.
+          </small>
+
+        </div>
+      </div>
+
+    </div>
+
+    <div class="mt-4 d-flex justify-content-between">
+      <button class="er-btn-secondary" (click)="anteriorPaso()">
+        <i class="fa-solid fa-arrow-left"></i>
+        Atrás
+      </button>
+
+      <button class="er-btn-primary" (click)="confirmarReserva()" [disabled]="guardando">
+        <i class="fa-solid fa-check"></i>
+        {{ guardando ? 'Guardando...' : 'Confirmar Reserva' }}
+      </button>
+    </div>
+
+  </div>
+
+  <!-- PASO 4 -->
+  <div class="er-card p-5 mt-4 text-center" *ngIf="pasoActual === 4">
+
+    <div class="er-success-icon">
+      <i class="fa-solid fa-circle-check"></i>
+    </div>
+
+    <h2 class="mt-3">Reserva creada exitosamente</h2>
+
+    <p class="text-muted">
+      La reserva fue registrada correctamente en ElectroReserve.
+    </p>
+
+    <h4 class="mt-3">Código Reserva #{{ reservaCreadaId }}</h4>
+
+    <div class="mt-4 d-flex justify-content-center gap-2">
+      <a routerLink="/reservas" class="er-btn-secondary">
+        Ver Reservas
+      </a>
+
+      <a [routerLink]="['/reservas', reservaCreadaId]" class="er-btn-primary">
+        Ver Detalle
+      </a>
+    </div>
+
+  </div>
+
+</div>

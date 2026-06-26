@@ -4,9 +4,86 @@
 @import './theme/spacing.css';
 @import './theme/shadows.css';
 @import './theme/animations.css';
+@import './theme/variables.css';
 
 body{
     margin: 0;
   background: var(--er-bg);
   color: var(--er-text);
+}
+@media print {
+
+  app-sidebar,
+  app-topbar,
+  .er-sidebar,
+  .er-topbar,
+  .layout-sidebar,
+  .layout-topbar,
+  .acciones-rapidas,
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+  }
+
+  .print-area {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 20px !important;
+    background: white !important;
+  }
+
+  .er-card,
+  .er-summary-box {
+    box-shadow: none !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .er-summary-box {
+    background: white !important;
+    color: black !important;
+    border: 1px solid #ddd !important;
+  }
+
+  .er-btn-primary,
+  .er-btn-secondary {
+    display: none !important;
+  }
+  .row {
+    display: block !important;
+  }
+
+  .col-lg-8,
+  .col-lg-6,
+  .col-lg-4 {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .er-card,
+  .er-summary-box {
+    margin-bottom: 14px !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .er-reserva-detalle {
+    font-size: 12px !important;
+  }
+
+  .er-section-title {
+    font-size: 18px !important;
+  }
+
+  .er-summary-box {
+    padding: 18px !important;
+  }
+  @page {
+    margin: 15mm;
+  }
 }

@@ -142,4 +142,11 @@ export class AlojamientosComponent implements OnInit {
     const sitio = this.sitios.find(x => x.id === sitioId);
     return sitio ? sitio.nombre : 'Sin sitio';
   }
+  obtenerCapacidadTotal(): number {
+  return this.alojamientos.reduce((total, alojamiento) => total + alojamiento.capacidad, 0);
+}
+
+obtenerTotalPorSitio(sitioId: number): number {
+  return this.alojamientos.filter(x => x.sitioId === sitioId).length;
+}
 }

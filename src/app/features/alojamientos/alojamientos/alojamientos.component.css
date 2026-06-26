@@ -1,0 +1,93 @@
+.er-section-title {
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+}
+
+.er-alojamientos-kpis {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.er-kpi-mini {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.er-kpi-mini i {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: var(--er-primary-light);
+  color: var(--er-primary);
+  font-size: 18px;
+}
+
+.er-kpi-mini span,
+.er-muted {
+  color: var(--er-muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.er-kpi-mini strong {
+  display: block;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--er-text);
+}
+
+.er-alojamientos-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+
+.er-alojamiento-admin-card {
+  background: var(--er-surface);
+  border: 1px solid var(--er-border);
+  border-radius: var(--er-radius-md);
+  box-shadow: var(--er-shadow-md);
+  overflow: hidden;
+  transition: .25s ease;
+}
+
+.er-alojamiento-admin-card:hover {
+  transform: translateY(-5px);
+}
+
+.er-alojamiento-admin-image {
+  height: 135px;
+  background: linear-gradient(135deg, var(--er-primary), #93c5fd);
+  color: white;
+  display: grid;
+  place-items: center;
+  font-size: 42px;
+}
+
+.er-alojamiento-admin-body {
+  padding: 18px;
+}
+
+.er-alojamiento-admin-body h5 {
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.er-alojamiento-admin-info {
+  display: grid;
+  gap: 10px;
+  color: var(--er-text);
+  font-size: 14px;
+}
+
+.er-alojamiento-admin-info i {
+  color: var(--er-primary);
+  width: 20px;
+}

@@ -1,47 +1,230 @@
-<div class="container mt-4">
-
-  <a routerLink="/reservas" class="btn btn-secondary mb-3">
-    Volver
-  </a>
-
+<div class="er-reserva-detalle pri
+nt-area">
   <div *ngIf="error" class="alert alert-danger">
     {{ error }}
   </div>
 
-  <div *ngIf="reserva" class="card shadow-sm">
+  <div *ngIf="reserva">
 
-    <div class="card-header">
-      <h4>Reserva #{{ reserva.id }}</h4>
+    <div class="er-page-header">
+
+      <div>
+
+        <div class="d-flex align-items-center gap-3">
+
+          <a routerLink="/reservas" class="er-btn-secondary">
+            <i class="fa-solid fa-arrow-left"></i>
+            Volver
+          </a>
+
+          <h1 class="er-page-title mb-0">
+            Reserva #{{ reserva.id }}
+          </h1>
+
+        </div>
+
+        <p class="er-page-subtitle mt-2">
+          Creada el {{ reserva.fechaReserva | date:'dd/MM/yyyy HH:mm' }}
+        </p>
+
+      </div>
+
+      <span
+        class="er-status"
+        [ngClass]="{
+          'confirmed': reserva.estado === 'Confirmada',
+          'pending': reserva.estado === 'Pendiente',
+          'cancelled': reserva.estado === 'Cancelada'
+        }">
+        {{ reserva.estado }}
+      </span>
+
     </div>
 
-    <div class="card-body">
+    <div class="row g-4">
 
-      <h5>Datos del Huésped</h5>
+      <div class="col-lg-8">
 
-      <p><strong>Nombre:</strong> {{ reserva.huesped }}</p>
-      <p><strong>Documento:</strong> {{ reserva.documentoHuesped }}</p>
-      <p><strong>Teléfono:</strong> {{ reserva.telefonoHuesped }}</p>
-      <p><strong>Correo:</strong> {{ reserva.correoHuesped }}</p>
+        <div class="er-card p-4 mb-4">
 
-      <hr>
+          <h4 class="er-section-title">
+            <i class="fa-solid fa-calendar-days"></i>
+            Estadía
+          </h4>
 
-      <h5>Datos de la Reserva</h5>
+          <div class="er-info-grid mt-4">
 
-      <p><strong>Sitio:</strong> {{ reserva.sitio }}</p>
-      <p><strong>Alojamiento:</strong> {{ reserva.alojamiento }}</p>
-      <p><strong>Fecha Reserva:</strong> {{ reserva.fechaReserva | date:'yyyy-MM-dd HH:mm' }}</p>
-      <p><strong>Llegada:</strong> {{ reserva.fechaLlegada | date:'yyyy-MM-dd' }}</p>
-      <p><strong>Salida:</strong> {{ reserva.fechaSalida | date:'yyyy-MM-dd' }}</p>
-      <p><strong>Personas:</strong> {{ reserva.numeroPersonas }}</p>
-      <p><strong>Habitaciones:</strong> {{ reserva.numeroHabitaciones }}</p>
+            <div>
+              <span>Llegada</span>
+              <strong>{{ reserva.fechaLlegada | date:'dd/MM/yyyy' }}</strong>
+            </div>
 
-      <hr>
+            <div>
+              <span>Salida</span>
+              <strong>{{ reserva.fechaSalida | date:'dd/MM/yyyy' }}</strong>
+            </div>
 
-      <h5>Valores</h5>
+            <div>
+              <span>Personas</span>
+              <strong>{{ reserva.numeroPersonas }}</strong>
+            </div>
 
-      <p><strong>Valor Noche:</strong> {{ reserva.valorNoche | currency:'COP':'symbol':'1.0-0' }}</p>
-      <p><strong>Total:</strong> {{ reserva.valorTotal | currency:'COP':'symbol':'1.0-0' }}</p>
-      <p><strong>Estado:</strong> {{ reserva.estado }}</p>
+            <div>
+              <span>Habitaciones</span>
+              <strong>{{ reserva.numeroHabitaciones }}</strong>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="row g-4">
+
+          <div class="col-lg-6">
+
+            <div class="er-card p-4 h-100">
+
+              <h4 class="er-section-title">
+                <i class="fa-solid fa-user"></i>
+                Datos del Huésped
+              </h4>
+
+              <div class="er-detail-list mt-4">
+
+                <div>
+                  <span>Nombre</span>
+                  <strong>{{ reserva.huesped }}</strong>
+                </div>
+
+                <div>
+                  <span>Documento</span>
+                  <strong>{{ reserva.documentoHuesped }}</strong>
+                </div>
+
+                <div>
+                  <span>Teléfono</span>
+                  <strong>{{ reserva.telefonoHuesped }}</strong>
+                </div>
+
+                <div>
+                  <span>Correo</span>
+                  <strong>{{ reserva.correoHuesped }}</strong>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="col-lg-6">
+
+            <div class="er-card p-4 h-100">
+
+              <h4 class="er-section-title">
+                <i class="fa-solid fa-house-chimney-window"></i>
+                Datos de la Reserva
+              </h4>
+
+              <div class="er-detail-list mt-4">
+
+                <div>
+                  <span>Sitio</span>
+                  <strong>{{ reserva.sitio }}</strong>
+                </div>
+
+                <div>
+                  <span>Alojamiento</span>
+                  <strong>{{ reserva.alojamiento }}</strong>
+                </div>
+
+                <div>
+                  <span>Fecha reserva</span>
+                  <strong>{{ reserva.fechaReserva | date:'dd/MM/yyyy HH:mm' }}</strong>
+                </div>
+
+                <div>
+                  <span>Estado</span>
+                  <strong>{{ reserva.estado }}</strong>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="col-lg-4">
+
+        <div class="er-summary-box">
+
+          <h4>Resumen Financiero</h4>
+
+          <div class="er-summary-line mt-4">
+            <span>Valor noche</span>
+            <strong>
+              {{ reserva.valorNoche | currency:'COP':'symbol':'1.0-0' }}
+            </strong>
+          </div>
+
+          <div class="er-summary-line">
+            <span>Total</span>
+            <strong>
+              {{ reserva.valorTotal | currency:'COP':'symbol':'1.0-0' }}
+            </strong>
+          </div>
+
+          <hr>
+
+          <div class="er-summary-total">
+            <span>Estado</span>
+            <strong>{{ reserva.estado }}</strong>
+          </div>
+
+          <small class="d-block mt-3">
+            Información consolidada de la reserva.
+          </small>
+
+        </div>
+
+<div class="er-card p-4 mt-4 acciones-rapidas">
+          <h4 class="er-section-title">
+            <i class="fa-solid fa-bolt"></i>
+            Acciones rápidas
+          </h4>
+
+          <div class="d-grid gap-2 mt-4">
+
+       <button class="er-btn-secondary" (click)="imprimir()">
+  <i class="fa-solid fa-print"></i>
+  Imprimir PDF
+</button>
+
+<button
+  class="er-btn-secondary"
+  *ngIf="reserva.estado === 'Pendiente'"
+  (click)="confirmarReserva()">
+  <i class="fa-solid fa-circle-check"></i>
+  Confirmar Reserva
+</button>
+
+<button
+  class="er-btn-secondary"
+  *ngIf="reserva.estado !== 'Cancelada'"
+  (click)="cancelarReserva()">
+  <i class="fa-solid fa-ban"></i>
+  Cancelar Reserva
+</button>
+
+          </div>
+
+        </div>
+
+      </div>
 
     </div>
 

@@ -25,60 +25,97 @@
 
   <div class="er-stats-grid">
 
-    <div class="er-stat-card">
+   <div class="er-stat-card">
 
-      <div class="er-stat-icon">
-        <i class="fa-solid fa-location-dot"></i>
-      </div>
+    <div class="er-stat-header">
 
-      <span>Total Sitios</span>
+        <div class="er-stat-icon">
+            <i class="fa-solid fa-location-dot"></i>
+        </div>
 
-      <strong>{{ resumen.totalSitios }}</strong>
-
-    </div>
-
-    <div class="er-stat-card">
-
-      <div class="er-stat-icon">
-        <i class="fa-solid fa-bed"></i>
-      </div>
-
-      <span>Alojamientos</span>
-
-      <strong>{{ resumen.totalAlojamientos }}</strong>
+        <span class="er-growth positive">
+            <i class="fa-solid fa-arrow-trend-up"></i>
+            +{{ resumen.sitiosMes }}
+        </span>
 
     </div>
 
-    <div class="er-stat-card">
+    <span>Total Sitios</span>
 
-      <div class="er-stat-icon">
-        <i class="fa-solid fa-calendar-check"></i>
-      </div>
+    <strong>{{ resumen.totalSitios }}</strong>
 
-      <span>Reservas</span>
+</div>
+   <div class="er-stat-card">
 
-      <strong>{{ resumen.totalReservas }}</strong>
+    <div class="er-stat-header">
 
-    </div>
+        <div class="er-stat-icon">
+            <i class="fa-solid fa-bed"></i>
+        </div>
 
-    <div class="er-stat-card">
-
-      <div class="er-stat-icon">
-        <i class="fa-solid fa-sack-dollar"></i>
-      </div>
-
-      <span>Ingresos Mes</span>
-
-      <strong>
-
-        {{ resumen.ingresosMes |
-
-        currency:'COP':'symbol':'1.0-0' }}
-
-      </strong>
+        <span class="er-growth positive">
+            <i class="fa-solid fa-arrow-trend-up"></i>
+            +{{ resumen.alojamientosMes }}
+        </span>
 
     </div>
 
+    <span>Alojamientos</span>
+
+    <strong>{{ resumen.totalAlojamientos }}</strong>
+
+</div>
+   <div class="er-stat-card">
+
+    <div class="er-stat-header">
+
+        <div class="er-stat-icon">
+            <i class="fa-solid fa-calendar-check"></i>
+        </div>
+
+        <span class="er-growth positive">
+
+            <i class="fa-solid fa-arrow-trend-up"></i>
+
+            {{ resumen.porcentajeReservasMes }}%
+
+        </span>
+
+    </div>
+
+    <span>Reservas</span>
+
+    <strong>{{ resumen.totalReservas }}</strong>
+
+</div>
+
+  <div class="er-stat-card">
+
+    <div class="er-stat-header">
+
+        <div class="er-stat-icon">
+            <i class="fa-solid fa-sack-dollar"></i>
+        </div>
+
+        <span class="er-growth positive">
+
+            <i class="fa-solid fa-arrow-trend-up"></i>
+
+            {{ resumen.porcentajeIngresosMes }}%
+
+        </span>
+
+    </div>
+
+    <span>Ingresos del Mes</span>
+
+    <strong>
+
+        {{ resumen.ingresosMes | currency:'COP':'symbol':'1.0-0' }}
+
+    </strong>
+
+</div>
   </div>
 
   
@@ -102,21 +139,42 @@
     </div>
   </div>
 
-  <div class="col-lg-4">
+
     <div class="er-card p-4 h-100">
       <h5>
-        <i class="fa-solid fa-circle-info"></i>
-        Resumen Operativo
-      </h5>
+  <i class="fa-solid fa-circle-info"></i>
+  Resumen Operativo
+</h5>
 
-      <div class="mt-3">
-        <p><strong>Pendientes:</strong> {{ resumen.reservasPendientes }}</p>
-        <p><strong>Confirmadas:</strong> {{ resumen.reservasConfirmadas }}</p>
-        <p><strong>Llegadas hoy:</strong> {{ resumen.llegadasHoy }}</p>
-        <p><strong>Salidas hoy:</strong> {{ resumen.salidasHoy }}</p>
-      </div>
-    </div>
+<div class="er-mini-grid">
+
+  <div class="er-mini-card warning">
+    <i class="fa-solid fa-clock"></i>
+    <span>Pendientes</span>
+    <strong>{{ resumen.reservasPendientes }}</strong>
   </div>
+
+  <div class="er-mini-card success">
+    <i class="fa-solid fa-circle-check"></i>
+    <span>Confirmadas</span>
+    <strong>{{ resumen.reservasConfirmadas }}</strong>
+  </div>
+
+  <div class="er-mini-card info">
+    <i class="fa-solid fa-right-to-bracket"></i>
+    <span>Llegadas</span>
+    <strong>{{ resumen.llegadasHoy }}</strong>
+  </div>
+
+  <div class="er-mini-card orange">
+    <i class="fa-solid fa-right-from-bracket"></i>
+    <span>Salidas</span>
+    <strong>{{ resumen.salidasHoy }}</strong>
+  </div>
+
+</div>>
+    </div>
+
 
 </div>
   <!-- Dos columnas -->

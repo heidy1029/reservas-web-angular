@@ -1,0 +1,13 @@
+:root{
+
+    --er-radius-sm:10px;
+    --er-radius-md:18px;
+    --er-radius-xl:26px;
+
+    --er-transition:.25s ease;
+
+    --er-shadow-sm:0 2px 8px rgba(0,0,0,.06);
+    --er-shadow-md:0 8px 24px rgba(0,0,0,.08);
+    --er-shadow-lg:0 15px 40px rgba(0,0,0,.12);
+
+}

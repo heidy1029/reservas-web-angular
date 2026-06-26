@@ -1,8 +1,9 @@
-.er-section {
-  margin-bottom: 24px;
-}
+:root{
 
-.er-grid {
-  display: grid;
-  gap: 20px;
+    --er-space-xs:4px;
+    --er-space-sm:8px;
+    --er-space-md:16px;
+    --er-space-lg:24px;
+    --er-space-xl:40px;
+
 }

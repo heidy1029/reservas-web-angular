@@ -1,0 +1,110 @@
+.er-section-title {
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+}
+
+.er-tarifas-kpis {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.er-kpi-mini {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.er-kpi-mini i {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: var(--er-primary-light);
+  color: var(--er-primary);
+  font-size: 18px;
+}
+
+.er-kpi-mini span,
+.er-muted {
+  color: var(--er-muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.er-kpi-mini strong {
+  display: block;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--er-text);
+}
+
+.er-tarifas-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+
+.er-tarifa-card {
+  background: var(--er-surface);
+  border: 1px solid var(--er-border);
+  border-radius: var(--er-radius-md);
+  box-shadow: var(--er-shadow-md);
+  padding: 20px;
+  transition: .25s ease;
+}
+
+.er-tarifa-card:hover {
+  transform: translateY(-5px);
+}
+
+.er-tarifa-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.er-price-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  background: var(--er-primary-light);
+  color: var(--er-primary);
+  font-size: 20px;
+}
+
+.er-tarifa-card h5 {
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.er-tarifa-body {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.er-tarifa-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid var(--er-border);
+  padding-bottom: 10px;
+}
+
+.er-tarifa-line span {
+  color: var(--er-muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.er-tarifa-line strong {
+  color: var(--er-text);
+  font-weight: 800;
+}

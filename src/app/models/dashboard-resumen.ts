@@ -16,4 +16,12 @@ export interface DashboardResumen {
 
   salidasHoy: number;
 
+  sitiosMes: number;
+
+  alojamientosMes: number;
+
+  porcentajeReservasMes: number;
+
+  porcentajeIngresosMes: number;
+
 }

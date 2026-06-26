@@ -91,7 +91,9 @@ sitioIdEditando: number | null = null;
     capacidadMaxima: sitio.capacidadMaxima
   };
 }
-
+obtenerCapacidadTotal(): number {
+  return this.sitios.reduce((total, sitio) => total + sitio.capacidadMaxima, 0);
+}
 cancelarEdicion(): void {
   this.modoEdicion = false;
   this.sitioIdEditando = null;

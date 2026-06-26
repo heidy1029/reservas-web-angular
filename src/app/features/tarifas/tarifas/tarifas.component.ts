@@ -144,4 +144,17 @@ export class TarifasComponent implements OnInit {
       valorPersonaAdicional: 0
     };
   }
+  obtenerValorPromedio(): number {
+  if (this.tarifas.length === 0) {
+    return 0;
+  }
+
+  const total = this.tarifas.reduce((sum, tarifa) => sum + tarifa.valorNoche, 0);
+  return Math.round(total / this.tarifas.length);
+}
+
+obtenerTemporadasUsadas(): number {
+  const temporadasIds = new Set(this.tarifas.map(t => t.temporadaId));
+  return temporadasIds.size;
+}
 }

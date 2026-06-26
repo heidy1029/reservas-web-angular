@@ -1,12 +1,10 @@
-body {
-  font-family: Inter, "Segoe UI", Arial, sans-serif;
-}
+:root{
 
-h1, h2, h3, h4, h5 {
-  color: var(--er-text);
-  font-weight: 700;
-}
+    --er-font-xs:12px;
+    --er-font-sm:14px;
+    --er-font-md:16px;
+    --er-font-lg:20px;
+    --er-font-xl:28px;
+    --er-font-xxl:40px;
 
-p {
-  color: var(--er-muted);
 }

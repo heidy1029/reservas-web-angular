@@ -117,4 +117,23 @@ export class TemporadasComponent implements OnInit {
       fechaFin: ''
     };
   }
+  calcularDiasTemporada(temporada: Temporada): number {
+  const inicio = new Date(temporada.fechaInicio);
+  const fin = new Date(temporada.fechaFin);
+
+  const diferencia = fin.getTime() - inicio.getTime();
+
+  return Math.ceil(diferencia / (1000 * 60 * 60 * 24)) + 1;
+}
+
+obtenerTemporadasActivas(): number {
+  const hoy = new Date();
+
+  return this.temporadas.filter(t => {
+    const inicio = new Date(t.fechaInicio);
+    const fin = new Date(t.fechaFin);
+
+    return hoy >= inicio && hoy <= fin;
+  }).length;
+}
 }
