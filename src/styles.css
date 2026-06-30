@@ -87,3 +87,27 @@ body{
     margin: 15mm;
   }
 }
+@media (max-width: 768px) {
+
+  .er-stats-grid,
+  .er-reportes-kpis,
+  .er-usuarios-kpis,
+  .er-sitios-kpis,
+  .er-alojamientos-kpis,
+  .er-tarifas-kpis,
+  .er-temporadas-kpis,
+  .er-alojamientos-grid,
+  .er-tarifas-grid,
+  .er-temporadas-grid,
+  .er-usuarios-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .er-info-grid,
+  .er-confirm-grid,
+  .er-admin-summary,
+  .er-temporada-dates {
+    grid-template-columns: 1fr !important;
+  }
+
+}
