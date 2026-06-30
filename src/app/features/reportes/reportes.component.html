@@ -1,0 +1,184 @@
+<div class="er-reportes">
+
+  <div class="er-page-header">
+
+    <div>
+      <h1 class="er-page-title">Reportes</h1>
+      <p class="er-page-subtitle">
+        Analiza ingresos, ocupación y comportamiento general de las reservas.
+      </p>
+    </div>
+
+    <button class="er-btn-primary" (click)="exportarReporte()">
+      <i class="fa-solid fa-download"></i>
+      Exportar
+    </button>
+
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <div class="er-reportes-kpis">
+
+    <div class="er-report-card">
+      <div class="er-report-icon">
+        <i class="fa-solid fa-sack-dollar"></i>
+      </div>
+      <span>Ingresos totales</span>
+      <strong>{{ obtenerIngresosTotales() | currency:'COP':'symbol':'1.0-0' }}</strong>
+    </div>
+
+    <div class="er-report-card">
+      <div class="er-report-icon">
+        <i class="fa-solid fa-calendar-check"></i>
+      </div>
+      <span>Total reservas</span>
+      <strong>{{ reservas.length }}</strong>
+    </div>
+
+    <div class="er-report-card">
+      <div class="er-report-icon">
+        <i class="fa-solid fa-bed"></i>
+      </div>
+      <span>Alojamientos</span>
+      <strong>{{ alojamientos.length }}</strong>
+    </div>
+
+    <div class="er-report-card">
+      <div class="er-report-icon">
+        <i class="fa-solid fa-chart-pie"></i>
+      </div>
+      <span>Ocupación referencial</span>
+      <strong>{{ obtenerOcupacionReferencial() }}%</strong>
+    </div>
+
+  </div>
+
+  <div class="row g-4 mt-1">
+
+    <div class="col-lg-6">
+
+      <div class="er-card p-4 h-100">
+
+        <h4 class="er-section-title">
+          <i class="fa-solid fa-chart-simple"></i>
+          Reservas por Estado
+        </h4>
+
+        <div class="er-status-report mt-4">
+
+          <div>
+            <span>Pendientes</span>
+            <strong>{{ obtenerPendientes() }}</strong>
+            <div class="er-progress">
+              <div class="warning" [style.width.%]="reservas.length ? (obtenerPendientes() / reservas.length) * 100 : 0"></div>
+            </div>
+          </div>
+
+          <div>
+            <span>Confirmadas</span>
+            <strong>{{ obtenerConfirmadas() }}</strong>
+            <div class="er-progress">
+              <div class="success" [style.width.%]="reservas.length ? (obtenerConfirmadas() / reservas.length) * 100 : 0"></div>
+            </div>
+          </div>
+
+          <div>
+            <span>Canceladas</span>
+            <strong>{{ obtenerCanceladas() }}</strong>
+            <div class="er-progress">
+              <div class="danger" [style.width.%]="reservas.length ? (obtenerCanceladas() / reservas.length) * 100 : 0"></div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="col-lg-6">
+
+      <div class="er-card p-4 h-100">
+
+        <h4 class="er-section-title">
+          <i class="fa-solid fa-location-dot"></i>
+          Resumen Administrativo
+        </h4>
+
+        <div class="er-admin-summary mt-4">
+
+          <div>
+            <span>Sitios registrados</span>
+            <strong>{{ sitios.length }}</strong>
+          </div>
+
+          <div>
+            <span>Alojamientos configurados</span>
+            <strong>{{ alojamientos.length }}</strong>
+          </div>
+
+          <div>
+            <span>Tarifas activas</span>
+            <strong>{{ tarifas.length }}</strong>
+          </div>
+
+          <div>
+            <span>Reservas procesadas</span>
+            <strong>{{ reservas.length }}</strong>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="er-card p-4 mt-4">
+
+    <h4 class="er-section-title">
+      <i class="fa-solid fa-table"></i>
+      Últimas Reservas
+    </h4>
+
+    <table class="table er-table mt-4 mb-0">
+
+      <thead>
+        <tr>
+          <th>Reserva</th>
+          <th>Huésped</th>
+          <th>Sitio</th>
+          <th>Total</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let reserva of reservas.slice(0, 8)">
+          <td><strong>#{{ reserva.id }}</strong></td>
+          <td>{{ reserva.huesped }}</td>
+          <td>{{ reserva.sitio }}</td>
+          <td>{{ reserva.valorTotal | currency:'COP':'symbol':'1.0-0' }}</td>
+          <td>
+            <span
+              class="er-status"
+              [ngClass]="{
+                'pending': reserva.estado === 'Pendiente',
+                'confirmed': reserva.estado === 'Confirmada',
+                'cancelled': reserva.estado === 'Cancelada'
+              }">
+              {{ reserva.estado }}
+            </span>
+          </td>
+        </tr>
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>

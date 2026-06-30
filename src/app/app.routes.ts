@@ -10,6 +10,9 @@ import { TarifasComponent } from './features/tarifas/tarifas/tarifas.component';
 import { ReservasComponent } from './features/reservas/reservas/reservas.component';
 import { ReservaDetalleComponent } from './features/reservas/reserva-detalle/reserva-detalle.component';
 import { NuevaReservaComponent } from './features/reservas/nueva-reserva/nueva-reserva.component';
+import { ReportesComponent } from './features/reportes/reportes.component';
+import { ConfiguracionComponent } from './features/configuracion/configuracion.component';
+import { UsuariosComponent } from './features/usuarios/usuarios.component';
 
 export const routes: Routes = [
 
@@ -62,7 +65,19 @@ export const routes: Routes = [
 {
   path: 'reservas/:id',
   component: ReservaDetalleComponent
-}
+},
+{
+  path: 'reportes',
+  component: ReportesComponent
+},
+{
+  path: 'configuracion',
+  component: ConfiguracionComponent
+},
+{
+  path: 'usuarios',
+  component: UsuariosComponent
+} 
 
 ]
   },

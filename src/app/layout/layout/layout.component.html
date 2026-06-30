@@ -1,7 +1,11 @@
 <div class="er-shell">
+<div
+  class="er-sidebar-backdrop"
+  [class.show]="sidebarOpen"
+  (click)="closeSidebar()">
+</div>
 
-  <aside class="er-sidebar">
-
+<aside class="er-sidebar" [class.open]="sidebarOpen">
     <div class="er-brand">
       <img src="../images/Logo.png" alt="ElectroReserve" class="er-logo">
 
@@ -15,12 +19,12 @@
 
     <nav class="er-menu">
 
-      <a routerLink="/dashboard" routerLinkActive="active">
+      <a routerLink="/dashboard" routerLinkActive="active" (click)="closeSidebar()">
         <i class="fa-solid fa-chart-pie"></i>
         <span>Dashboard</span>
       </a>
 
-      <a routerLink="/reservas" routerLinkActive="active">
+      <a routerLink="/reservas" routerLinkActive="active" (click)="closeSidebar()">
         <i class="fa-solid fa-calendar-check"></i>
         <span>Reservas</span>
       </a>
@@ -31,12 +35,12 @@
 
     <nav class="er-menu">
 
-      <a routerLink="/sitios" routerLinkActive="active">
+      <a routerLink="/sitios" routerLinkActive="active" (click)="closeSidebar()">
         <i class="fa-solid fa-location-dot"></i>
         <span>Sitios</span>
       </a>
 
-      <a routerLink="/alojamientos" routerLinkActive="active">
+      <a routerLink="/alojamientos" routerLinkActive="active" (click)="closeSidebar()">
         <i class="fa-solid fa-bed"></i>
         <span>Alojamientos</span>
       </a>
@@ -47,30 +51,30 @@
 
     <nav class="er-menu">
 
-      <a routerLink="/tarifas" routerLinkActive="active">
+      <a routerLink="/tarifas" routerLinkActive="active" (click)="closeSidebar()">
         <i class="fa-solid fa-money-bill-wave"></i>
         <span>Tarifas</span>
       </a>
 
-      <a routerLink="/temporadas" routerLinkActive="active">
+      <a routerLink="/temporadas" routerLinkActive="active" (click)="closeSidebar()">
         <i class="fa-solid fa-calendar-days"></i>
         <span>Temporadas</span>
       </a>
 
-      <a>
-        <i class="fa-solid fa-users"></i>
-        <span>Usuarios</span>
-      </a>
+     <a routerLink="/usuarios" routerLinkActive="active" (click)="closeSidebar()">
+  <i class="fa-solid fa-users"></i>
+  <span>Usuarios</span>
+</a>
 
-      <a>
-        <i class="fa-solid fa-chart-line"></i>
-        <span>Reportes</span>
-      </a>
+      <a routerLink="/reportes" routerLinkActive="active" (click)="closeSidebar()">
+  <i class="fa-solid fa-chart-line"></i>
+  <span>Reportes</span>
+</a>
 
-      <a>
-        <i class="fa-solid fa-gear"></i>
-        <span>Configuración</span>
-      </a>
+      <a routerLink="/configuracion" routerLinkActive="active" (click)="closeSidebar()">
+  <i class="fa-solid fa-gear"></i>
+  <span>Configuración</span>
+</a>
 
     </nav>
 
@@ -80,10 +84,15 @@
     </button>
 
   </aside>
+ 
 
   <section class="er-main">
 
     <header class="er-topbar">
+
+<button class="er-mobile-menu-btn" (click)="toggleSidebar()">
+  <i class="fa-solid fa-bars"></i>
+</button>
 
       <div class="er-search">
         <i class="fa-solid fa-magnifying-glass"></i>

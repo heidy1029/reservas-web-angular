@@ -11,6 +11,7 @@ import { AuthService } from '../../core/services/auth.service';
   styleUrl: './layout.component.css'
 })
 export class LayoutComponent {
+sidebarOpen = false;
 
   constructor(
     private authService: AuthService,
@@ -21,4 +22,10 @@ export class LayoutComponent {
     this.authService.logout();
     this.router.navigate(['/login']);
   }
+  toggleSidebar(): void {
+  this.sidebarOpen = !this.sidebarOpen;
+}
+closeSidebar(): void {
+  this.sidebarOpen = false;
+}
 }

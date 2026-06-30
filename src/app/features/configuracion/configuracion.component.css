@@ -1,0 +1,38 @@
+.er-section-title {
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+}
+
+.er-configuracion label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--er-muted);
+  margin-bottom: 6px;
+}
+
+.er-logo-box {
+  height: 170px;
+  border-radius: var(--er-radius-md);
+  background: linear-gradient(135deg, var(--er-primary), #93c5fd);
+  color: white;
+  display: grid;
+  place-items: center;
+  font-size: 52px;
+}
+
+.er-configuracion .form-control,
+.er-configuracion .form-select {
+  border-radius: 12px;
+  padding: 11px 14px;
+}
+
+.er-configuracion .er-card {
+  transition: .25s ease;
+}
+
+.er-configuracion .er-card:hover {
+  transform: translateY(-3px);
+}

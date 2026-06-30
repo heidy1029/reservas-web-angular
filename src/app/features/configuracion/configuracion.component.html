@@ -1,0 +1,217 @@
+<div class="er-configuracion">
+
+    <div class="er-page-header">
+
+        <div>
+
+            <h1 class="er-page-title">
+                Configuración
+            </h1>
+
+            <p class="er-page-subtitle">
+                Configura la información general del sistema.
+            </p>
+
+        </div>
+
+    </div>
+
+    <div *ngIf="mensaje" class="alert alert-success">
+
+        {{ mensaje }}
+
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-lg-8">
+
+            <div class="er-card p-4">
+
+                <h4 class="er-section-title">
+
+                    <i class="fa-solid fa-building"></i>
+
+                    Información Empresa
+
+                </h4>
+
+                <div class="row mt-4">
+
+                    <div class="col-md-6 mb-3">
+
+                        <label>Empresa</label>
+
+                        <input
+                            class="form-control"
+                            [(ngModel)]="configuracion.empresa">
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label>NIT</label>
+
+                        <input
+                            class="form-control"
+                            [(ngModel)]="configuracion.nit">
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label>Correo</label>
+
+                        <input
+                            class="form-control"
+                            [(ngModel)]="configuracion.correo">
+
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+
+                        <label>Teléfono</label>
+
+                        <input
+                            class="form-control"
+                            [(ngModel)]="configuracion.telefono">
+
+                    </div>
+
+                    <div class="col-md-12 mb-3">
+
+                        <label>Dirección</label>
+
+                        <input
+                            class="form-control"
+                            [(ngModel)]="configuracion.direccion">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="er-card p-4 mt-4">
+
+                <h4 class="er-section-title">
+
+                    <i class="fa-solid fa-bed"></i>
+
+                    Operación
+
+                </h4>
+
+                <div class="row mt-4">
+
+                    <div class="col-md-4">
+
+                        <label>Hora Check In</label>
+
+                        <input
+                            type="time"
+                            class="form-control"
+                            [(ngModel)]="configuracion.checkIn">
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <label>Hora Check Out</label>
+
+                        <input
+                            type="time"
+                            class="form-control"
+                            [(ngModel)]="configuracion.checkOut">
+
+                    </div>
+
+                    <div class="col-md-4">
+
+                        <label>IVA (%)</label>
+
+                        <input
+                            type="number"
+                            class="form-control"
+                            [(ngModel)]="configuracion.iva">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="er-card p-4">
+
+                <h4 class="er-section-title">
+
+                    <i class="fa-solid fa-image"></i>
+
+                    Logo
+
+                </h4>
+
+                <div class="er-logo-box mt-4">
+
+                    <i class="fa-solid fa-building"></i>
+
+                </div>
+
+                <button
+                    class="er-btn-secondary mt-4 w-100">
+
+                    Cambiar Logo
+
+                </button>
+
+            </div>
+
+            <div class="er-card p-4 mt-4">
+
+                <h4 class="er-section-title">
+
+                    <i class="fa-solid fa-globe"></i>
+
+                    Regional
+
+                </h4>
+
+                <div class="mt-4">
+
+                    <label>Moneda</label>
+
+                    <select
+                        class="form-select"
+                        [(ngModel)]="configuracion.moneda">
+
+                        <option>COP</option>
+
+                        <option>USD</option>
+
+                        <option>EUR</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <button
+                class="er-btn-primary w-100 mt-4"
+                (click)="guardar()">
+
+                <i class="fa-solid fa-floppy-disk"></i>
+
+                Guardar Configuración
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>

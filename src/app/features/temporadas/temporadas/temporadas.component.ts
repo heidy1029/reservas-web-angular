@@ -136,4 +136,5 @@ obtenerTemporadasActivas(): number {
     return hoy >= inicio && hoy <= fin;
   }).length;
 }
+
 }

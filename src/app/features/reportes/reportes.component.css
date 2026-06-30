@@ -1,0 +1,118 @@
+.er-section-title {
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+}
+
+.er-reportes-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 22px;
+}
+
+.er-report-card {
+  background: var(--er-surface);
+  border: 1px solid var(--er-border);
+  border-radius: var(--er-radius-md);
+  box-shadow: var(--er-shadow-md);
+  padding: 24px;
+}
+
+.er-report-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: var(--er-primary-light);
+  color: var(--er-primary);
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+
+.er-report-card span {
+  display: block;
+  color: var(--er-muted);
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.er-report-card strong {
+  display: block;
+  font-size: 28px;
+  color: var(--er-text);
+  margin-top: 6px;
+}
+
+.er-status-report {
+  display: grid;
+  gap: 20px;
+}
+
+.er-status-report span,
+.er-admin-summary span {
+  color: var(--er-muted);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.er-status-report strong,
+.er-admin-summary strong {
+  display: block;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--er-text);
+}
+
+.er-progress {
+  height: 10px;
+  background: #eef2f7;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.er-progress div {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.er-progress .warning {
+  background: var(--er-warning);
+}
+
+.er-progress .success {
+  background: var(--er-success);
+}
+
+.er-progress .danger {
+  background: var(--er-danger);
+}
+
+.er-admin-summary {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.er-admin-summary div {
+  border: 1px solid var(--er-border);
+  border-radius: var(--er-radius-md);
+  padding: 18px;
+}
+
+.er-table th {
+  color: var(--er-muted);
+  font-size: 12px;
+  text-transform: uppercase;
+  padding: 18px;
+  border-bottom: 1px solid var(--er-border);
+}
+
+.er-table td {
+  padding: 18px;
+  vertical-align: middle;
+}
