@@ -1,0 +1,47 @@
+<div
+  class="er-confirm-backdrop"
+  *ngIf="confirmService.visible">
+
+  <div class="er-confirm-modal">
+
+    <div
+      class="er-confirm-icon"
+      [ngClass]="confirmService.options.type">
+
+      <i
+        class="fa-solid"
+        [ngClass]="{
+          'fa-triangle-exclamation': confirmService.options.type === 'danger',
+          'fa-circle-exclamation': confirmService.options.type === 'warning',
+          'fa-circle-info': confirmService.options.type === 'info'
+        }">
+      </i>
+
+    </div>
+
+    <h3>{{ confirmService.options.title }}</h3>
+
+    <p>{{ confirmService.options.message }}</p>
+
+    <div class="er-confirm-actions">
+
+      <button
+        type="button"
+        class="er-btn-secondary"
+        (click)="confirmService.cancel()">
+        {{ confirmService.options.cancelText }}
+      </button>
+
+      <button
+        type="button"
+        class="er-btn-primary"
+        [ngClass]="confirmService.options.type"
+        (click)="confirmService.accept()">
+        {{ confirmService.options.confirmText }}
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

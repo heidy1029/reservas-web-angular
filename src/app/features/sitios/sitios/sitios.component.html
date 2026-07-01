@@ -30,7 +30,7 @@
           {{ modoEdicion ? 'Editar Sitio' : 'Crear Sitio' }}
         </h4>
 
-        <form class="mt-4" (ngSubmit)="guardarSitio()">
+        <form class="mt-4" #sitioForm="ngForm" (ngSubmit)="sitioForm.valid && guardarSitio()" novalidate>
 
           <div class="mb-3">
             <label class="form-label">Nombre</label>
@@ -39,7 +39,11 @@
               class="form-control"
               name="nombre"
               [(ngModel)]="nuevoSitio.nombre"
+              #nombreInput="ngModel"
               required>
+            <div *ngIf="nombreInput.invalid && (nombreInput.dirty || nombreInput.touched || sitioForm.submitted)" class="text-danger mt-1">
+              <small>⚠ El nombre es obligatorio</small>
+            </div>
           </div>
 
           <div class="mb-3">
@@ -49,7 +53,11 @@
               class="form-control"
               name="tipo"
               [(ngModel)]="nuevoSitio.tipo"
+              #tipoInput="ngModel"
               required>
+            <div *ngIf="tipoInput.invalid && (tipoInput.dirty || tipoInput.touched || sitioForm.submitted)" class="text-danger mt-1">
+              <small>⚠ El tipo es obligatorio</small>
+            </div>
           </div>
 
           <div class="mb-3">
@@ -59,7 +67,11 @@
               class="form-control"
               name="ubicacion"
               [(ngModel)]="nuevoSitio.ubicacion"
+              #ubicacionInput="ngModel"
               required>
+            <div *ngIf="ubicacionInput.invalid && (ubicacionInput.dirty || ubicacionInput.touched || sitioForm.submitted)" class="text-danger mt-1">
+              <small>⚠ La ubicación es obligatoria</small>
+            </div>
           </div>
 
           <div class="mb-3">
@@ -69,7 +81,13 @@
               class="form-control"
               name="capacidadMaxima"
               [(ngModel)]="nuevoSitio.capacidadMaxima"
+              #capacidadInput="ngModel"
+              min="1"
               required>
+            <div *ngIf="capacidadInput.invalid && (capacidadInput.dirty || capacidadInput.touched || sitioForm.submitted)" class="text-danger mt-1">
+              <small *ngIf="capacidadInput.errors?.['required']">⚠ La capacidad máxima es obligatoria</small>
+              <small *ngIf="capacidadInput.errors?.['min']">⚠ Debe ingresar mínimo una persona</small>
+            </div>
           </div>
 
           <div class="mb-3">
@@ -84,15 +102,17 @@
 
           <div class="d-flex gap-2">
 
-            <button type="submit" class="er-btn-primary">
-              <i class="fa-solid fa-floppy-disk"></i>
-              {{ modoEdicion ? 'Actualizar Sitio' : 'Guardar Sitio' }}
+            <button type="submit" class="er-btn-primary" [disabled]="guardando">
+              <i *ngIf="!guardando" class="fa-solid fa-floppy-disk"></i>
+              <i *ngIf="guardando" class="fa-solid fa-circle-notch fa-spin"></i>
+              {{ guardando ? (modoEdicion ? 'Actualizando...' : 'Guardando...') : (modoEdicion ? 'Actualizar Sitio' : 'Guardar Sitio') }}
             </button>
 
             <button
               *ngIf="modoEdicion"
               type="button"
               class="er-btn-secondary"
+              [disabled]="guardando"
               (click)="cancelarEdicion()">
               Cancelar
             </button>

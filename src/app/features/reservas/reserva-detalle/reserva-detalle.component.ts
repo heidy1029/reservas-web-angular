@@ -4,6 +4,8 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { ReservasService } from '../../../core/services/reservas.service';
 import { ReservaDetalle } from '../../../models/reserva-detalle';
+import { ToastService } from '../../../core/services/toast.service';
+import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service';
 
 @Component({
   selector: 'app-reserva-detalle',
@@ -19,7 +21,9 @@ export class ReservaDetalleComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private reservasService: ReservasService
+    private reservasService: ReservasService,
+    private toastService: ToastService,
+    private confirm: ConfirmDialogService
   ) {}
 
   ngOnInit(): void {
@@ -47,7 +51,7 @@ export class ReservaDetalleComponent implements OnInit {
       this.cargarReserva();
     },
     error: () => {
-      this.error = 'Error al confirmar la reserva.';
+      this.toastService.show('Error al confirmar la reserva.', 'error');
     }
   });
 }
@@ -64,7 +68,7 @@ cancelarReserva(): void {
       this.cargarReserva();
     },
     error: () => {
-      this.error = 'Error al cancelar la reserva.';
+      this.toastService.show('Error al cancelar la reserva.', 'error');
     }
   });
 }

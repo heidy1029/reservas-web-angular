@@ -5,11 +5,15 @@ import { FormsModule } from '@angular/forms';
 import { SitiosService } from '../../../core/services/sitios.service';
 import { Sitio } from '../../../models/sitio';
 import { SitioCreate } from '../../../models/sitio';
-
+import { ToastService } from '../../../core/services/toast.service';
+import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service';
+import { LoadingService } from '../../../core/services/loading.service';
 @Component({
   selector: 'app-sitios',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, 
+    
+  ],
   templateUrl: './sitios.component.html',
   styleUrl: './sitios.component.css'
 })
@@ -27,10 +31,16 @@ export class SitiosComponent implements OnInit {
 
   mensaje = '';
   error = '';
-modoEdicion = false;
-sitioIdEditando: number | null = null;
+  modoEdicion = false;
+  sitioIdEditando: number | null = null;
+  guardando = false;
+
   constructor(
-    private sitiosService: SitiosService
+    private sitiosService: SitiosService,
+   private toast: ToastService,
+     private confirm: ConfirmDialogService,
+     private loadingService: LoadingService
+
   ) {}
 
   ngOnInit(): void {
@@ -49,36 +59,39 @@ sitioIdEditando: number | null = null;
     });
   }
 
- guardarSitio(): void {
-  this.mensaje = '';
-  this.error = '';
+  guardarSitio(): void {
+    this.guardando = true;
 
-  if (this.modoEdicion && this.sitioIdEditando !== null) {
-    this.sitiosService.update(this.sitioIdEditando, this.nuevoSitio).subscribe({
+    if (this.modoEdicion && this.sitioIdEditando !== null) {
+      this.sitiosService.update(this.sitioIdEditando, this.nuevoSitio).subscribe({
+        next: () => {
+          this.guardando = false;
+          this.toast.success('Sitio actualizado correctamente.');
+          this.cancelarEdicion();
+          this.cargarSitios();
+        },
+        error: () => {
+          this.guardando = false;
+          this.toast.error('No fue posible actualizar el sitio.');
+        }
+      });
+
+      return;
+    }
+
+    this.sitiosService.create(this.nuevoSitio).subscribe({
       next: () => {
-        this.mensaje = 'Sitio actualizado correctamente.';
+        this.guardando = false;
+        this.toast.success('Sitio creado correctamente.');
         this.cancelarEdicion();
         this.cargarSitios();
       },
       error: () => {
-        this.error = 'Error al actualizar el sitio.';
+        this.guardando = false;
+        this.toast.error('No fue posible crear el sitio.');
       }
     });
-
-    return;
   }
-
-  this.sitiosService.create(this.nuevoSitio).subscribe({
-    next: () => {
-      this.mensaje = 'Sitio creado correctamente.';
-      this.cancelarEdicion();
-      this.cargarSitios();
-    },
-    error: () => {
-      this.error = 'Error al crear el sitio.';
-    }
-  });
-}
   editarSitio(sitio: Sitio): void {
   this.modoEdicion = true;
   this.sitioIdEditando = sitio.id;
@@ -106,18 +119,31 @@ cancelarEdicion(): void {
     capacidadMaxima: 0
   };
 }
-eliminarSitio(id: number): void {
-  if (!confirm('¿Deseas eliminar este sitio?')) {
+async eliminarSitio(id: number): Promise<void> {
+
+  const confirmado = await this.confirm.confirm({
+    title: 'Eliminar sitio',
+    message: '¿Deseas eliminar este sitio? Esta acción no se puede deshacer.',
+    confirmText: 'Eliminar',
+    cancelText: 'Cancelar',
+    type: 'danger'
+  });
+
+  if (!confirmado) {
     return;
   }
 
+  this.loadingService.show('Eliminando sitio...');
+
   this.sitiosService.delete(id).subscribe({
     next: () => {
-      this.mensaje = 'Sitio eliminado correctamente.';
+      this.loadingService.hide();
+      this.toast.success('Sitio eliminado correctamente.');
       this.cargarSitios();
     },
     error: () => {
-      this.error = 'Error al eliminar el sitio.';
+      this.loadingService.hide();
+      this.toast.error('No fue posible eliminar el sitio.');
     }
   });
 }

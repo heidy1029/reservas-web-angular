@@ -11,14 +11,6 @@
 
   </div>
 
-  <div *ngIf="mensaje" class="alert alert-success">
-    {{ mensaje }}
-  </div>
-
-  <div *ngIf="error" class="alert alert-danger">
-    {{ error }}
-  </div>
-
   <div class="row g-4">
 
     <div class="col-lg-5">
@@ -30,7 +22,7 @@
           {{ modoEdicion ? 'Editar Temporada' : 'Crear Temporada' }}
         </h4>
 
-        <form class="mt-4" (ngSubmit)="guardarTemporada()">
+        <form class="mt-4" #temporadaForm="ngForm" (ngSubmit)="temporadaForm.valid && guardarTemporada()" novalidate>
 
           <div class="mb-3">
             <label class="form-label">Nombre</label>
@@ -39,7 +31,11 @@
               class="form-control"
               name="nombre"
               [(ngModel)]="nuevaTemporada.nombre"
+              #nombreInput="ngModel"
               required>
+            <div *ngIf="nombreInput.invalid && (nombreInput.dirty || nombreInput.touched || temporadaForm.submitted)" class="text-danger mt-1">
+              <small>⚠ El nombre es obligatorio</small>
+            </div>
           </div>
 
           <div class="mb-3">
@@ -49,7 +45,11 @@
               class="form-control"
               name="fechaInicio"
               [(ngModel)]="nuevaTemporada.fechaInicio"
+              #inicioInput="ngModel"
               required>
+            <div *ngIf="inicioInput.invalid && (inicioInput.dirty || inicioInput.touched || temporadaForm.submitted)" class="text-danger mt-1">
+              <small>⚠ La fecha de inicio es obligatoria</small>
+            </div>
           </div>
 
           <div class="mb-3">
@@ -59,20 +59,26 @@
               class="form-control"
               name="fechaFin"
               [(ngModel)]="nuevaTemporada.fechaFin"
+              #finInput="ngModel"
               required>
+            <div *ngIf="finInput.invalid && (finInput.dirty || finInput.touched || temporadaForm.submitted)" class="text-danger mt-1">
+              <small>⚠ La fecha de fin es obligatoria</small>
+            </div>
           </div>
 
           <div class="d-flex gap-2 mt-4">
 
-            <button type="submit" class="er-btn-primary">
-              <i class="fa-solid fa-floppy-disk"></i>
-              {{ modoEdicion ? 'Actualizar' : 'Guardar' }}
+            <button type="submit" class="er-btn-primary" [disabled]="guardando">
+              <i *ngIf="!guardando" class="fa-solid fa-floppy-disk"></i>
+              <i *ngIf="guardando" class="fa-solid fa-circle-notch fa-spin"></i>
+              {{ guardando ? (modoEdicion ? 'Actualizando...' : 'Guardando...') : (modoEdicion ? 'Actualizar' : 'Guardar') }}
             </button>
 
             <button
               type="button"
               class="er-btn-secondary"
               *ngIf="modoEdicion"
+              [disabled]="guardando"
               (click)="cancelarEdicion()">
               Cancelar
             </button>

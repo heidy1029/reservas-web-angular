@@ -8,6 +8,9 @@ import { SitiosService } from '../../../core/services/sitios.service';
 import { Alojamiento } from '../../../models/alojamiento';
 import { AlojamientoCreate } from '../../../models/alojamiento-create';
 import { Sitio } from '../../../models/sitio';
+import { ToastService } from '../../../core/services/toast.service';
+import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service';
+import { LoadingService } from '../../../core/services/loading.service';
 
 @Component({
   selector: 'app-alojamientos',
@@ -30,13 +33,17 @@ export class AlojamientosComponent implements OnInit {
 
   modoEdicion = false;
   alojamientoIdEditando: number | null = null;
+  guardando = false;
 
   mensaje = '';
   error = '';
 
   constructor(
     private alojamientosService: AlojamientosService,
-    private sitiosService: SitiosService
+    private sitiosService: SitiosService,
+    private toastService: ToastService,
+    private confirm: ConfirmDialogService,
+    private loadingService: LoadingService
   ) {}
 
   ngOnInit(): void {
@@ -50,7 +57,7 @@ export class AlojamientosComponent implements OnInit {
         this.alojamientos = response;
       },
       error: () => {
-        this.error = 'Error al cargar alojamientos.';
+        this.toastService.show('Error al cargar alojamientos.', 'error');
       }
     });
   }
@@ -61,25 +68,26 @@ export class AlojamientosComponent implements OnInit {
         this.sitios = response;
       },
       error: () => {
-        this.error = 'Error al cargar sitios.';
+              this.toastService.show('Error al cargar sitios.', 'error');
       }
     });
   }
 
   guardarAlojamiento(): void {
-    this.mensaje = '';
-    this.error = '';
+    this.guardando = true;
 
     if (this.modoEdicion && this.alojamientoIdEditando !== null) {
       this.alojamientosService.update(this.alojamientoIdEditando, this.nuevoAlojamiento)
         .subscribe({
           next: () => {
-            this.mensaje = 'Alojamiento actualizado correctamente.';
+            this.guardando = false;
+            this.toastService.show('Alojamiento actualizado correctamente.', 'success');
             this.cancelarEdicion();
             this.cargarAlojamientos();
           },
           error: () => {
-            this.error = 'Error al actualizar alojamiento.';
+            this.guardando = false;
+            this.toastService.show('Error al actualizar alojamiento.', 'error');
           }
         });
 
@@ -88,12 +96,14 @@ export class AlojamientosComponent implements OnInit {
 
     this.alojamientosService.create(this.nuevoAlojamiento).subscribe({
       next: () => {
-        this.mensaje = 'Alojamiento creado correctamente.';
+        this.guardando = false;
+        this.toastService.show('Alojamiento creado correctamente.', 'success');
         this.cancelarEdicion();
         this.cargarAlojamientos();
       },
       error: () => {
-        this.error = 'Error al crear alojamiento.';
+        this.guardando = false;
+        this.toastService.show('Error al crear alojamiento.', 'error');
       }
     });
   }
@@ -110,21 +120,34 @@ export class AlojamientosComponent implements OnInit {
     };
   }
 
-  eliminarAlojamiento(id: number): void {
-    if (!confirm('¿Deseas eliminar este alojamiento?')) {
-      return;
-    }
+ async eliminarAlojamiento(id: number): Promise<void> {
+  const confirmado = await this.confirm.confirm({
+    title: 'Eliminar alojamiento',
+    message: '¿Deseas eliminar este alojamiento? Esta acción no se puede deshacer.',
+    confirmText: 'Eliminar',
+    cancelText: 'Cancelar',
+    type: 'danger'
+  });
 
-    this.alojamientosService.delete(id).subscribe({
-      next: () => {
-        this.mensaje = 'Alojamiento eliminado correctamente.';
-        this.cargarAlojamientos();
-      },
-      error: () => {
-        this.error = 'Error al eliminar alojamiento.';
-      }
-    });
-  }
+  if (!confirmado) return;
+
+  this.loadingService.show('Eliminando alojamiento...');
+
+  this.alojamientosService.delete(id).subscribe({
+    next: () => {
+      this.loadingService.hide();
+      this.toastService.success('Alojamiento eliminado correctamente.');
+
+      this.alojamientos = this.alojamientos.filter(x => x.id !== id);
+
+      this.cargarAlojamientos();
+    },
+    error: () => {
+      this.loadingService.hide();
+      this.toastService.error('No fue posible eliminar el alojamiento.');
+    }
+  });
+}
 
   cancelarEdicion(): void {
     this.modoEdicion = false;

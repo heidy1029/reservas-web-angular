@@ -6,6 +6,8 @@ import { SitiosService } from '../../../core/services/sitios.service';
 import { ReservasService } from '../../../core/services/reservas.service';
 import { Sitio } from '../../../models/sitio';
 import { AlojamientoDisponible } from '../../../models/alojamiento-disponible';
+import { ToastService } from '../../../core/services/toast.service';
+import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service';
 
 @Component({
   selector: 'app-nueva-reserva',
@@ -40,7 +42,9 @@ export class NuevaReservaComponent implements OnInit {
 
   constructor(
     private sitiosService: SitiosService,
-    private reservasService: ReservasService
+    private reservasService: ReservasService,
+    private toastService: ToastService,
+    private confirm: ConfirmDialogService
   ) {}
 
   ngOnInit(): void {
@@ -54,18 +58,17 @@ export class NuevaReservaComponent implements OnInit {
         this.sitios = response;
       },
       error: () => {
-        this.error = 'Error al cargar los sitios turísticos.';
+        this.toastService.show('Error al cargar los sitios turísticos.', 'error');
       }
     });
   }
 
   buscarDisponibilidad(): void {
-    this.error = '';
     this.alojamientosDisponibles = [];
     this.alojamientoSeleccionado = undefined;
 
     if (!this.reserva.sitioId || !this.reserva.fechaLlegada || !this.reserva.fechaSalida) {
-      this.error = 'Debe seleccionar sitio, fecha de llegada y fecha de salida.';
+      this.toastService.show('Debe seleccionar sitio, fecha de llegada y fecha de salida.', 'error');
       return;
     }
 
@@ -81,11 +84,11 @@ export class NuevaReservaComponent implements OnInit {
         this.buscando = false;
 
         if (this.alojamientosDisponibles.length === 0) {
-          this.error = 'No hay alojamientos disponibles que cumplan con los criterios.';
+          this.toastService.show('No hay alojamientos disponibles que cumplan con los criterios.', 'error');
         }
       },
       error: () => {
-        this.error = 'Error al consultar la disponibilidad de alojamientos.';
+        this.toastService.show('Error al consultar la disponibilidad de alojamientos.', 'error');
         this.buscando = false;
       }
     });
@@ -115,7 +118,7 @@ export class NuevaReservaComponent implements OnInit {
     this.error = '';
 
     if (!this.alojamientoSeleccionado) {
-      this.error = 'Debe seleccionar un alojamiento.';
+      this.toastService.show('Debe seleccionar un alojamiento.', 'error');
       return;
     }
 
@@ -143,12 +146,51 @@ export class NuevaReservaComponent implements OnInit {
       },
       error: (error: any) => {
         this.guardando = false;
-        this.error = error.error || 'Error al crear la reserva.';
+        this.toastService.show(error.error || 'Error al crear la reserva.', 'error');
       }
     });
   }
 
   siguientePaso(): void {
+    if (this.pasoActual === 1) {
+      if (!this.reserva.sitioId || !this.reserva.fechaLlegada || !this.reserva.fechaSalida) {
+        this.toastService.show('⚠ Sitio, fecha de llegada y fecha de salida son obligatorios', 'error');
+        return;
+      }
+      if (this.reserva.numeroPersonas < 1) {
+        this.toastService.show('⚠ Debe ingresar mínimo una persona', 'error');
+        return;
+      }
+      if (!this.alojamientoSeleccionado) {
+        this.toastService.show('⚠ Debe seleccionar un alojamiento', 'error');
+        return;
+      }
+    }
+
+    if (this.pasoActual === 2) {
+      if (!this.reserva.nombreHuesped) {
+        this.toastService.show('⚠ El nombre es obligatorio', 'error');
+        return;
+      }
+      if (!this.reserva.documentoHuesped) {
+        this.toastService.show('⚠ El documento es obligatorio', 'error');
+        return;
+      }
+      if (!this.reserva.telefonoHuesped) {
+        this.toastService.show('⚠ El teléfono es obligatorio', 'error');
+        return;
+      }
+      if (!this.reserva.correoHuesped) {
+        this.toastService.show('⚠ El correo es obligatorio', 'error');
+        return;
+      }
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(this.reserva.correoHuesped)) {
+        this.toastService.show('⚠ El correo no es válido', 'error');
+        return;
+      }
+    }
+
     if (this.pasoActual < 4) {
       this.pasoActual++;
     }

@@ -12,6 +12,9 @@ import { TarifaCreate } from '../../../models/tarifa-create';
 import { Sitio } from '../../../models/sitio';
 import { Alojamiento } from '../../../models/alojamiento';
 import { Temporada } from '../../../models/temporada';
+import { ToastService } from '../../../core/services/toast.service';
+import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service';
+
 
 @Component({
   selector: 'app-tarifas',
@@ -39,6 +42,7 @@ export class TarifasComponent implements OnInit {
 
   modoEdicion = false;
   tarifaIdEditando: number | null = null;
+  guardando = false;
 
   mensaje = '';
   error = '';
@@ -47,7 +51,9 @@ export class TarifasComponent implements OnInit {
     private tarifasService: TarifasService,
     private sitiosService: SitiosService,
     private alojamientosService: AlojamientosService,
-    private temporadasService: TemporadasService
+    private temporadasService: TemporadasService,
+    private toastService: ToastService,
+    private confirm: ConfirmDialogService
   ) {}
 
   ngOnInit(): void {
@@ -57,35 +63,43 @@ export class TarifasComponent implements OnInit {
   cargarDatos(): void {
     this.tarifasService.getAll().subscribe({
       next: r => this.tarifas = r,
-      error: () => this.error = 'Error al cargar tarifas.'
+      error: () => this.toastService.show('Error al cargar tarifas.', 'error')
     });
 
     this.sitiosService.getAll().subscribe({
-      next: r => this.sitios = r
+      next: r => this.sitios = r,
+      error: () => this.toastService.show('Error al cargar sitios.', 'error')
     });
 
     this.alojamientosService.getAll().subscribe({
-      next: r => this.alojamientos = r
+      next: r => this.alojamientos = r,
+      error: () => this.toastService.show('Error al cargar alojamientos.', 'error')
     });
 
     this.temporadasService.getAll().subscribe({
-      next: r => this.temporadas = r
+      next: r => this.temporadas = r,
+      error: () => this.toastService.show('Error al cargar temporadas.', 'error')
     });
   }
 
   guardarTarifa(): void {
     this.mensaje = '';
     this.error = '';
+    this.guardando = true;
 
     if (this.modoEdicion && this.tarifaIdEditando !== null) {
       this.tarifasService.update(this.tarifaIdEditando, this.nuevaTarifa)
         .subscribe({
           next: () => {
-            this.mensaje = 'Tarifa actualizada correctamente.';
+            this.guardando = false;
+            this.toastService.show('Tarifa actualizada correctamente.', 'success');
             this.cancelarEdicion();
             this.cargarDatos();
           },
-          error: () => this.error = 'Error al actualizar tarifa.'
+          error: () => {
+            this.guardando = false;
+            this.toastService.show('Error al actualizar tarifa.', 'error');
+          }
         });
 
       return;
@@ -93,11 +107,15 @@ export class TarifasComponent implements OnInit {
 
     this.tarifasService.create(this.nuevaTarifa).subscribe({
       next: () => {
-        this.mensaje = 'Tarifa creada correctamente.';
+        this.guardando = false;
+        this.toastService.show('Tarifa creada correctamente.', 'success');
         this.cancelarEdicion();
         this.cargarDatos();
       },
-      error: () => this.error = 'Error al crear tarifa.'
+      error: () => {
+        this.guardando = false;
+        this.toastService.show('Error al crear tarifa.', 'error');
+      }
     });
   }
 
@@ -116,8 +134,16 @@ export class TarifasComponent implements OnInit {
     };
   }
 
-  eliminarTarifa(id: number): void {
-    if (!confirm('¿Deseas eliminar esta tarifa?')) {
+  async eliminarTarifa(id: number): Promise<void> {
+    const confirmado = await this.confirm.confirm({
+      title: 'Eliminar tarifa',
+      message: '¿Deseas eliminar esta tarifa? Esta acción no se puede deshacer.',
+      confirmText: 'Eliminar',
+      cancelText: 'Cancelar',
+      type: 'danger'
+    });
+
+    if (!confirmado) {
       return;
     }
 

@@ -11,13 +11,6 @@
 
   </div>
 
-  <div *ngIf="mensaje" class="alert alert-success">
-    {{ mensaje }}
-  </div>
-
-  <div *ngIf="error" class="alert alert-danger">
-    {{ error }}
-  </div>
 
   <div class="row g-4">
 
@@ -30,7 +23,7 @@
           {{ modoEdicion ? 'Editar Alojamiento' : 'Crear Alojamiento' }}
         </h4>
 
-        <form class="mt-4" (ngSubmit)="guardarAlojamiento()">
+        <form class="mt-4" #alojamientoForm="ngForm" (ngSubmit)="alojamientoForm.valid && nuevoAlojamiento.sitioId !== 0 && guardarAlojamiento()" novalidate>
 
           <div class="mb-3">
             <label class="form-label">Nombre</label>
@@ -39,7 +32,11 @@
               class="form-control"
               name="nombre"
               [(ngModel)]="nuevoAlojamiento.nombre"
+              #nombreInput="ngModel"
               required>
+            <div *ngIf="nombreInput.invalid && (nombreInput.dirty || nombreInput.touched || alojamientoForm.submitted)" class="text-danger mt-1">
+              <small>⚠ El nombre es obligatorio</small>
+            </div>
           </div>
 
           <div class="mb-3">
@@ -49,7 +46,11 @@
               class="form-control"
               name="tipo"
               [(ngModel)]="nuevoAlojamiento.tipo"
+              #tipoInput="ngModel"
               required>
+            <div *ngIf="tipoInput.invalid && (tipoInput.dirty || tipoInput.touched || alojamientoForm.submitted)" class="text-danger mt-1">
+              <small>⚠ El tipo es obligatorio</small>
+            </div>
           </div>
 
           <div class="mb-3">
@@ -59,7 +60,13 @@
               class="form-control"
               name="capacidad"
               [(ngModel)]="nuevoAlojamiento.capacidad"
+              #capacidadInput="ngModel"
+              min="1"
               required>
+            <div *ngIf="capacidadInput.invalid && (capacidadInput.dirty || capacidadInput.touched || alojamientoForm.submitted)" class="text-danger mt-1">
+              <small *ngIf="capacidadInput.errors?.['required']">⚠ La capacidad es obligatoria</small>
+              <small *ngIf="capacidadInput.errors?.['min']">⚠ Debe ingresar mínimo una persona</small>
+            </div>
           </div>
 
           <div class="mb-3">
@@ -68,6 +75,7 @@
               class="form-select"
               name="sitioId"
               [(ngModel)]="nuevoAlojamiento.sitioId"
+              #sitioIdInput="ngModel"
               required>
               <option [ngValue]="0">Seleccione...</option>
               <option
@@ -76,19 +84,24 @@
                 {{ sitio.nombre }}
               </option>
             </select>
+            <div *ngIf="(nuevoAlojamiento.sitioId === 0 || sitioIdInput.invalid) && (sitioIdInput.dirty || sitioIdInput.touched || alojamientoForm.submitted)" class="text-danger mt-1">
+              <small>⚠ Debe seleccionar un sitio</small>
+            </div>
           </div>
 
           <div class="d-flex gap-2">
 
-            <button type="submit" class="er-btn-primary">
-              <i class="fa-solid fa-floppy-disk"></i>
-              {{ modoEdicion ? 'Actualizar' : 'Guardar' }}
+            <button type="submit" class="er-btn-primary" [disabled]="guardando">
+              <i *ngIf="!guardando" class="fa-solid fa-floppy-disk"></i>
+              <i *ngIf="guardando" class="fa-solid fa-circle-notch fa-spin"></i>
+              {{ guardando ? (modoEdicion ? 'Actualizando...' : 'Guardando...') : (modoEdicion ? 'Actualizar' : 'Guardar') }}
             </button>
 
             <button
               type="button"
               class="er-btn-secondary"
               *ngIf="modoEdicion"
+              [disabled]="guardando"
               (click)="cancelarEdicion()">
               Cancelar
             </button>

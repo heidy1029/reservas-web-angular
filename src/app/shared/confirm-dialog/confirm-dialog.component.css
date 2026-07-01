@@ -1,0 +1,87 @@
+.er-confirm-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, .48);
+  z-index: 99998;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+}
+
+.er-confirm-modal {
+  width: 100%;
+  max-width: 420px;
+  background: white;
+  border-radius: 22px;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, .22);
+  animation: fadeUp .25s ease;
+}
+
+.er-confirm-icon {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  margin: 0 auto 18px;
+  display: grid;
+  place-items: center;
+  font-size: 30px;
+}
+
+.er-confirm-icon.danger {
+  background: var(--er-danger-light);
+  color: var(--er-danger);
+}
+
+.er-confirm-icon.warning {
+  background: var(--er-warning-light);
+  color: var(--er-warning);
+}
+
+.er-confirm-icon.info {
+  background: var(--er-info-light);
+  color: var(--er-info);
+}
+
+.er-confirm-modal h3 {
+  font-weight: 800;
+  margin-bottom: 10px;
+}
+
+.er-confirm-modal p {
+  color: var(--er-muted);
+  margin-bottom: 24px;
+}
+
+.er-confirm-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.er-confirm-actions button {
+  min-width: 130px;
+}
+
+.er-btn-primary.danger {
+  background: var(--er-danger);
+}
+
+.er-btn-primary.warning {
+  background: var(--er-warning);
+}
+
+.er-btn-primary.info {
+  background: var(--er-info);
+}
+
+@media (max-width: 520px) {
+  .er-confirm-actions {
+    flex-direction: column;
+  }
+
+  .er-confirm-actions button {
+    width: 100%;
+  }
+}

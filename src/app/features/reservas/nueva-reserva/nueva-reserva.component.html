@@ -56,27 +56,40 @@
 
       <div class="col-md-4">
         <label class="form-label">Sitio</label>
-        <select class="form-select" [(ngModel)]="reserva.sitioId">
+        <select class="form-select" [(ngModel)]="reserva.sitioId" #sitioVal="ngModel" required>
           <option value="">Seleccione un sitio</option>
           <option *ngFor="let sitio of sitios" [value]="sitio.id">
             {{ sitio.nombre }}
           </option>
         </select>
+        <div *ngIf="sitioVal.invalid && (sitioVal.dirty || sitioVal.touched)" class="text-danger mt-1">
+          <small>⚠ El sitio es obligatorio</small>
+        </div>
       </div>
 
       <div class="col-md-3">
         <label class="form-label">Fecha llegada</label>
-        <input type="date" class="form-control" [(ngModel)]="reserva.fechaLlegada">
+        <input type="date" class="form-control" [(ngModel)]="reserva.fechaLlegada" #fechaLlegadaVal="ngModel" required>
+        <div *ngIf="fechaLlegadaVal.invalid && (fechaLlegadaVal.dirty || fechaLlegadaVal.touched)" class="text-danger mt-1">
+          <small>⚠ La fecha de llegada es obligatoria</small>
+        </div>
       </div>
 
       <div class="col-md-3">
         <label class="form-label">Fecha salida</label>
-        <input type="date" class="form-control" [(ngModel)]="reserva.fechaSalida">
+        <input type="date" class="form-control" [(ngModel)]="reserva.fechaSalida" #fechaSalidaVal="ngModel" required>
+        <div *ngIf="fechaSalidaVal.invalid && (fechaSalidaVal.dirty || fechaSalidaVal.touched)" class="text-danger mt-1">
+          <small>⚠ La fecha de salida es obligatoria</small>
+        </div>
       </div>
 
       <div class="col-md-2">
         <label class="form-label">Personas</label>
-        <input type="number" class="form-control" min="1" [(ngModel)]="reserva.numeroPersonas">
+        <input type="number" class="form-control" min="1" [(ngModel)]="reserva.numeroPersonas" #personasVal="ngModel" required>
+        <div *ngIf="personasVal.invalid && (personasVal.dirty || personasVal.touched)" class="text-danger mt-1">
+          <small *ngIf="personasVal.errors?.['required']">⚠ Obligatorio</small>
+          <small *ngIf="personasVal.errors?.['min']">⚠ Mínimo 1 persona</small>
+        </div>
       </div>
 
     </div>
@@ -157,22 +170,35 @@
 
       <div class="col-md-6">
         <label class="form-label">Nombre completo</label>
-        <input type="text" class="form-control" [(ngModel)]="reserva.nombreHuesped">
+        <input type="text" class="form-control" [(ngModel)]="reserva.nombreHuesped" #nombreHuespedVal="ngModel" required>
+        <div *ngIf="nombreHuespedVal.invalid && (nombreHuespedVal.dirty || nombreHuespedVal.touched)" class="text-danger mt-1">
+          <small>⚠ El nombre es obligatorio</small>
+        </div>
       </div>
 
       <div class="col-md-6">
         <label class="form-label">Documento</label>
-        <input type="text" class="form-control" [(ngModel)]="reserva.documentoHuesped">
+        <input type="text" class="form-control" [(ngModel)]="reserva.documentoHuesped" #documentoHuespedVal="ngModel" required>
+        <div *ngIf="documentoHuespedVal.invalid && (documentoHuespedVal.dirty || documentoHuespedVal.touched)" class="text-danger mt-1">
+          <small>⚠ El documento es obligatorio</small>
+        </div>
       </div>
 
       <div class="col-md-6">
         <label class="form-label">Teléfono</label>
-        <input type="text" class="form-control" [(ngModel)]="reserva.telefonoHuesped">
+        <input type="text" class="form-control" [(ngModel)]="reserva.telefonoHuesped" #telefonoHuespedVal="ngModel" required>
+        <div *ngIf="telefonoHuespedVal.invalid && (telefonoHuespedVal.dirty || telefonoHuespedVal.touched)" class="text-danger mt-1">
+          <small>⚠ El teléfono es obligatorio</small>
+        </div>
       </div>
 
       <div class="col-md-6">
         <label class="form-label">Correo</label>
-        <input type="email" class="form-control" [(ngModel)]="reserva.correoHuesped">
+        <input type="email" class="form-control" [(ngModel)]="reserva.correoHuesped" #correoHuespedVal="ngModel" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" required>
+        <div *ngIf="correoHuespedVal.invalid && (correoHuespedVal.dirty || correoHuespedVal.touched)" class="text-danger mt-1">
+          <small *ngIf="correoHuespedVal.errors?.['required']">⚠ El correo es obligatorio</small>
+          <small *ngIf="correoHuespedVal.errors?.['pattern']">⚠ El correo no es válido</small>
+        </div>
       </div>
 
     </div>
@@ -314,7 +340,8 @@
       </button>
 
       <button class="er-btn-primary" (click)="confirmarReserva()" [disabled]="guardando">
-        <i class="fa-solid fa-check"></i>
+        <i *ngIf="!guardando" class="fa-solid fa-check"></i>
+        <i *ngIf="guardando" class="fa-solid fa-circle-notch fa-spin"></i>
         {{ guardando ? 'Guardando...' : 'Confirmar Reserva' }}
       </button>
     </div>

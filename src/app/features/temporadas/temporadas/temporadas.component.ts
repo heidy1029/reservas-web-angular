@@ -5,6 +5,9 @@ import { FormsModule } from '@angular/forms';
 import { TemporadasService } from '../../../core/services/temporadas.service';
 import { Temporada } from '../../../models/temporada';
 import { TemporadaCreate } from '../../../models/temporada-create';
+import { ToastService } from '../../../core/services/toast.service';
+import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service';
+
 
 @Component({
   selector: 'app-temporadas',
@@ -25,12 +28,15 @@ export class TemporadasComponent implements OnInit {
 
   modoEdicion = false;
   temporadaIdEditando: number | null = null;
+  guardando = false;
 
   mensaje = '';
   error = '';
 
   constructor(
-    private temporadasService: TemporadasService
+    private temporadasService: TemporadasService,
+    private toastService: ToastService,
+    private confirm: ConfirmDialogService
   ) {}
 
   ngOnInit(): void {
@@ -43,7 +49,7 @@ export class TemporadasComponent implements OnInit {
         this.temporadas = response;
       },
       error: () => {
-        this.error = 'Error al cargar temporadas.';
+        this.toastService.show('Error al cargar temporadas.', 'error');
       }
     });
   }
@@ -51,17 +57,20 @@ export class TemporadasComponent implements OnInit {
   guardarTemporada(): void {
     this.mensaje = '';
     this.error = '';
+    this.guardando = true;
 
     if (this.modoEdicion && this.temporadaIdEditando !== null) {
       this.temporadasService.update(this.temporadaIdEditando, this.nuevaTemporada)
         .subscribe({
           next: () => {
-            this.mensaje = 'Temporada actualizada correctamente.';
+            this.guardando = false;
+            this.toastService.show('Temporada actualizada correctamente.', 'success');
             this.cancelarEdicion();
             this.cargarTemporadas();
           },
           error: () => {
-            this.error = 'Error al actualizar temporada.';
+            this.guardando = false;
+            this.toastService.show('Error al actualizar temporada.', 'error');
           }
         });
 
@@ -70,12 +79,14 @@ export class TemporadasComponent implements OnInit {
 
     this.temporadasService.create(this.nuevaTemporada).subscribe({
       next: () => {
-        this.mensaje = 'Temporada creada correctamente.';
+        this.guardando = false;
+        this.toastService.show('Temporada creada correctamente.', 'success');
         this.cancelarEdicion();
         this.cargarTemporadas();
       },
       error: () => {
-        this.error = 'Error al crear temporada.';
+        this.guardando = false;
+        this.toastService.show('Error al crear temporada.', 'error');
       }
     });
   }
@@ -91,18 +102,26 @@ export class TemporadasComponent implements OnInit {
     };
   }
 
-  eliminarTemporada(id: number): void {
-    if (!confirm('¿Deseas eliminar esta temporada?')) {
+  async eliminarTemporada(id: number): Promise<void> {
+    const confirmado = await this.confirm.confirm({
+      title: 'Eliminar temporada',
+      message: '¿Deseas eliminar esta temporada? Esta acción no se puede deshacer.',
+      confirmText: 'Eliminar',
+      cancelText: 'Cancelar',
+      type: 'danger'
+    });
+
+    if (!confirmado) {
       return;
     }
 
     this.temporadasService.delete(id).subscribe({
       next: () => {
-        this.mensaje = 'Temporada eliminada correctamente.';
+        this.toastService.show('Temporada eliminada correctamente.', 'success');
         this.cargarTemporadas();
       },
       error: () => {
-        this.error = 'Error al eliminar temporada.';
+        this.toastService.show('Error al eliminar temporada.', 'error');
       }
     });
   }

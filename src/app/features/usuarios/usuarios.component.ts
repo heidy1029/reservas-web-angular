@@ -1,169 +1,148 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-interface Usuario{
-
-  id:number;
-  nombre:string;
-  apellido:string;
-  correo:string;
-  usuario:string;
-  rol:string;
-  estado:string;
-  ultimoAcceso:string;
-
-}
+import { ToastService } from '../../core/services/toast.service';
+import { ConfirmDialogService } from '../../core/services/confirm-dialog.service';
+import { UsuariosService, Usuario } from '../../core/services/usuarios.service';
 
 @Component({
   selector: 'app-usuarios',
-  standalone:true,
-  imports:[CommonModule,FormsModule],
-  templateUrl:'./usuarios.component.html',
-  styleUrl:'./usuarios.component.css'
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  templateUrl: './usuarios.component.html',
+  styleUrl: './usuarios.component.css'
 })
-export class UsuariosComponent{
+export class UsuariosComponent implements OnInit {
 
-  usuarios:Usuario[]=[
+  usuarios: Usuario[] = [];
 
-    {
-      id:1,
-      nombre:'Freddie',
-      apellido:'Lucumí',
-      correo:'freddie@electroreserve.com',
-      usuario:'admin',
-      rol:'Administrador',
-      estado:'Activo',
-      ultimoAcceso:'Hoy 10:35'
-    },
-
-    {
-      id:2,
-      nombre:'Laura',
-      apellido:'Martínez',
-      correo:'laura@electroreserve.com',
-      usuario:'recepcion',
-      rol:'Recepción',
-      estado:'Activo',
-      ultimoAcceso:'Hoy 09:10'
-    }
-
-  ];
-
-  nuevoUsuario={
-
-    nombre:'',
-    apellido:'',
-    correo:'',
-    usuario:'',
-    password:'',
-    rol:'Recepción',
-    estado:'Activo'
-
+  nuevoUsuario = {
+    nombre: '',
+    apellido: '',
+    correo: '',
+    usuario: '',
+    password: '',
+    rol: 'Recepción',
+    estado: 'Activo'
   };
 
-  modoEdicion=false;
+  modoEdicion = false;
+  usuarioEditando: string | null = null;
+  guardando = false;
 
-  usuarioEditando:number|null=null;
+  constructor(
+    private usuariosService: UsuariosService,
+    private toastService: ToastService,
+    private confirm: ConfirmDialogService
+  ) {}
 
-  guardarUsuario(){
+  ngOnInit(): void {
+    this.cargarUsuarios();
+  }
 
-    if(this.modoEdicion){
+  cargarUsuarios(): void {
+    this.usuariosService.getAll().subscribe({
+      next: r => this.usuarios = r,
+      error: () => this.toastService.error('Error al cargar los usuarios.')
+    });
+  }
 
-      const usuario=this.usuarios.find(x=>x.id==this.usuarioEditando);
+  guardarUsuario(): void {
+    this.guardando = true;
 
-      if(usuario){
-
-        usuario.nombre=this.nuevoUsuario.nombre;
-        usuario.apellido=this.nuevoUsuario.apellido;
-        usuario.correo=this.nuevoUsuario.correo;
-        usuario.usuario=this.nuevoUsuario.usuario;
-        usuario.rol=this.nuevoUsuario.rol;
-        usuario.estado=this.nuevoUsuario.estado;
-
-      }
-
-    }else{
-
-      this.usuarios.unshift({
-
-        id:this.usuarios.length+1,
-
-        nombre:this.nuevoUsuario.nombre,
-        apellido:this.nuevoUsuario.apellido,
-        correo:this.nuevoUsuario.correo,
-        usuario:this.nuevoUsuario.usuario,
-        rol:this.nuevoUsuario.rol,
-        estado:this.nuevoUsuario.estado,
-        ultimoAcceso:'Nunca'
-
+    if (this.modoEdicion && this.usuarioEditando !== null) {
+      this.usuariosService.update(this.usuarioEditando, this.nuevoUsuario).subscribe({
+        next: () => {
+          this.guardando = false;
+          this.toastService.success('Usuario actualizado correctamente.');
+          this.cancelar();
+          this.cargarUsuarios();
+        },
+        error: () => {
+          this.guardando = false;
+          this.toastService.error('Error al actualizar el usuario.');
+        }
       });
-
+      return;
     }
 
-    this.cancelar();
-
+    this.usuariosService.create(this.nuevoUsuario).subscribe({
+      next: () => {
+        this.guardando = false;
+        this.toastService.success('Usuario creado correctamente.');
+        this.cancelar();
+        this.cargarUsuarios();
+      },
+      error: () => {
+        this.guardando = false;
+        this.toastService.error('Error al crear el usuario.');
+      }
+    });
   }
 
-  editar(usuario:Usuario){
+  editar(usuario: Usuario): void {
+    this.modoEdicion = true;
+    this.usuarioEditando = usuario.id;
 
-    this.modoEdicion=true;
-
-    this.usuarioEditando=usuario.id;
-
-    this.nuevoUsuario={
-
-      nombre:usuario.nombre,
-      apellido:usuario.apellido,
-      correo:usuario.correo,
-      usuario:usuario.usuario,
-      password:'',
-      rol:usuario.rol,
-      estado:usuario.estado
-
+    this.nuevoUsuario = {
+      nombre: usuario.nombre,
+      apellido: usuario.apellido,
+      correo: usuario.correo,
+      usuario: usuario.usuario,
+      password: '',
+      rol: usuario.rol,
+      estado: usuario.estado
     };
-
   }
 
-  eliminar(id:number){
+  async eliminar(id: string): Promise<void> {
+    const confirmado = await this.confirm.confirm({
+      title: 'Eliminar usuario',
+      message: '¿Deseas eliminar este usuario? Esta acción no se puede deshacer.',
+      confirmText: 'Eliminar',
+      cancelText: 'Cancelar',
+      type: 'danger'
+    });
 
-    if(confirm('¿Eliminar usuario?')){
-
-      this.usuarios=this.usuarios.filter(x=>x.id!=id);
-
+    if (!confirmado) {
+      return;
     }
 
+    this.usuariosService.delete(id).subscribe({
+      next: () => {
+        this.toastService.success('Usuario eliminado correctamente.');
+        this.cargarUsuarios();
+      },
+      error: () => {
+        this.toastService.error('Error al eliminar el usuario.');
+      }
+    });
   }
 
-  cancelar(){
+  cancelar(): void {
+    this.modoEdicion = false;
+    this.usuarioEditando = null;
 
-    this.modoEdicion=false;
-
-    this.usuarioEditando=null;
-
-    this.nuevoUsuario={
-
-      nombre:'',
-      apellido:'',
-      correo:'',
-      usuario:'',
-      password:'',
-      rol:'Recepción',
-      estado:'Activo'
-
+    this.nuevoUsuario = {
+      nombre: '',
+      apellido: '',
+      correo: '',
+      usuario: '',
+      password: '',
+      rol: 'Recepción',
+      estado: 'Activo'
     };
-
   }
+
   obtenerUsuariosActivos(): number {
-  return this.usuarios.filter(u => u.estado === 'Activo').length;
-}
+    return this.usuarios.filter(u => u.estado === 'Activo').length;
+  }
 
-obtenerAdministradores(): number {
-  return this.usuarios.filter(u => u.rol === 'Administrador').length;
-}
+  obtenerAdministradores(): number {
+    return this.usuarios.filter(u => u.rol === 'Administrador').length;
+  }
 
-obtenerRecepcionistas(): number {
-  return this.usuarios.filter(u => u.rol === 'Recepción').length;
-}
-
+  obtenerRecepcionistas(): number {
+    return this.usuarios.filter(u => u.rol === 'Recepción').length;
+  }
 }

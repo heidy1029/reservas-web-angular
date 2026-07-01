@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { ReservasService } from '../../../core/services/reservas.service';
 import { ReservaListado } from '../../../models/reserva-listado';
 import { RouterLink } from '@angular/router';
+import { ToastService } from '../../../core/services/toast.service';
+import { ConfirmDialogService } from '../../../core/services/confirm-dialog.service';
 
 @Component({
   selector: 'app-reservas',
@@ -18,7 +20,9 @@ export class ReservasComponent implements OnInit {
   error = '';
 
   constructor(
-    private reservasService: ReservasService
+    private reservasService: ReservasService,
+    private toastService: ToastService,
+    private confirm: ConfirmDialogService
   ) {}
 
   ngOnInit(): void {
@@ -31,7 +35,7 @@ export class ReservasComponent implements OnInit {
         this.reservas = response;
       },
       error: () => {
-        this.error = 'Error al cargar reservas.';
+        this.toastService.show('Error al cargar reservas.', 'error');
       }
     });
   }
@@ -89,19 +93,24 @@ exportarReservas(): void {
 
   window.URL.revokeObjectURL(url);
 }
-cancelarReserva(id: number): void {
-  const confirmar = confirm('¿Está seguro de cancelar esta reserva?');
+async cancelarReserva(id: number): Promise<void> {
+ const confirmado = await this.confirm.confirm({
+  title: 'Cancelar reserva',
+  message: 'La reserva cambiará al estado Cancelada. Esta acción puede afectar la disponibilidad del alojamiento.',
+  confirmText: 'Cancelar reserva',
+  cancelText: 'Volver',
+  type: 'warning'
+});
 
-  if (!confirmar) {
-    return;
-  }
-
+if (!confirmado) {
+  return;
+}
   this.reservasService.cancelarReserva(id).subscribe({
     next: () => {
       this.cargarReservas();
     },
     error: () => {
-      this.error = 'Error al cancelar la reserva.';
+      this.toastService.show('Error al cancelar la reserva.', 'error');
     }
   });
 }

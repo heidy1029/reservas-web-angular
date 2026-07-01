@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ToastService } from '../../core/services/toast.service';
 
 @Component({
   selector: 'app-configuracion',
@@ -10,7 +11,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './configuracion.component.css'
 })
 export class ConfiguracionComponent {
-
+constructor(private toastService: ToastService) {}
   configuracion = {
 
     empresa: 'ElectroReserve SAS',
@@ -34,16 +35,8 @@ export class ConfiguracionComponent {
 
   mensaje = '';
 
-  guardar() {
-
-    this.mensaje = 'Configuración guardada correctamente.';
-
-    setTimeout(() => {
-
-      this.mensaje = '';
-
-    }, 3000);
-
-  }
+ guardar(): void {
+  this.toastService.show('Configuración guardada correctamente.', 'success');
+}
 
 }

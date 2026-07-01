@@ -11,14 +11,6 @@
 
   </div>
 
-  <div *ngIf="mensaje" class="alert alert-success">
-    {{ mensaje }}
-  </div>
-
-  <div *ngIf="error" class="alert alert-danger">
-    {{ error }}
-  </div>
-
   <div class="row g-4">
 
     <div class="col-lg-5">
@@ -30,16 +22,19 @@
           {{ modoEdicion ? 'Editar Tarifa' : 'Crear Tarifa' }}
         </h4>
 
-        <form class="mt-4" (ngSubmit)="guardarTarifa()">
+        <form class="mt-4" #tarifaForm="ngForm" (ngSubmit)="tarifaForm.valid && nuevaTarifa.sitioId !== 0 && nuevaTarifa.temporadaId !== 0 && guardarTarifa()" novalidate>
 
           <div class="mb-3">
             <label class="form-label">Sitio</label>
-            <select class="form-select" name="sitioId" [(ngModel)]="nuevaTarifa.sitioId">
+            <select class="form-select" name="sitioId" [(ngModel)]="nuevaTarifa.sitioId" #sitioInput="ngModel" required>
               <option [ngValue]="0">Seleccione...</option>
               <option *ngFor="let sitio of sitios" [ngValue]="sitio.id">
                 {{ sitio.nombre }}
               </option>
             </select>
+            <div *ngIf="(nuevaTarifa.sitioId === 0 || sitioInput.invalid) && (sitioInput.dirty || sitioInput.touched || tarifaForm.submitted)" class="text-danger mt-1">
+              <small>⚠ Debe seleccionar un sitio</small>
+            </div>
           </div>
 
           <div class="mb-3">
@@ -54,12 +49,15 @@
 
           <div class="mb-3">
             <label class="form-label">Temporada</label>
-            <select class="form-select" name="temporadaId" [(ngModel)]="nuevaTarifa.temporadaId">
+            <select class="form-select" name="temporadaId" [(ngModel)]="nuevaTarifa.temporadaId" #temporadaInput="ngModel" required>
               <option [ngValue]="0">Seleccione...</option>
               <option *ngFor="let temporada of temporadas" [ngValue]="temporada.id">
                 {{ temporada.nombre }}
               </option>
             </select>
+            <div *ngIf="(nuevaTarifa.temporadaId === 0 || temporadaInput.invalid) && (temporadaInput.dirty || temporadaInput.touched || tarifaForm.submitted)" class="text-danger mt-1">
+              <small>⚠ Debe seleccionar una temporada</small>
+            </div>
           </div>
 
           <div class="row g-3">
@@ -70,7 +68,14 @@
                 type="number"
                 class="form-control"
                 name="desde"
-                [(ngModel)]="nuevaTarifa.numeroPersonasDesde">
+                [(ngModel)]="nuevaTarifa.numeroPersonasDesde"
+                #desdeInput="ngModel"
+                min="1"
+                required>
+              <div *ngIf="desdeInput.invalid && (desdeInput.dirty || desdeInput.touched || tarifaForm.submitted)" class="text-danger mt-1">
+                <small *ngIf="desdeInput.errors?.['required']">⚠ Personas desde es obligatorio</small>
+                <small *ngIf="desdeInput.errors?.['min']">⚠ Mínimo 1 persona</small>
+              </div>
             </div>
 
             <div class="col-md-6">
@@ -79,7 +84,14 @@
                 type="number"
                 class="form-control"
                 name="hasta"
-                [(ngModel)]="nuevaTarifa.numeroPersonasHasta">
+                [(ngModel)]="nuevaTarifa.numeroPersonasHasta"
+                #hastaInput="ngModel"
+                min="1"
+                required>
+              <div *ngIf="hastaInput.invalid && (hastaInput.dirty || hastaInput.touched || tarifaForm.submitted)" class="text-danger mt-1">
+                <small *ngIf="hastaInput.errors?.['required']">⚠ Personas hasta es obligatorio</small>
+                <small *ngIf="hastaInput.errors?.['min']">⚠ Mínimo 1 persona</small>
+              </div>
             </div>
 
             <div class="col-md-6">
@@ -88,7 +100,14 @@
                 type="number"
                 class="form-control"
                 name="valorNoche"
-                [(ngModel)]="nuevaTarifa.valorNoche">
+                [(ngModel)]="nuevaTarifa.valorNoche"
+                #valorNocheInput="ngModel"
+                min="0"
+                required>
+              <div *ngIf="valorNocheInput.invalid && (valorNocheInput.dirty || valorNocheInput.touched || tarifaForm.submitted)" class="text-danger mt-1">
+                <small *ngIf="valorNocheInput.errors?.['required']">⚠ El valor por noche es obligatorio</small>
+                <small *ngIf="valorNocheInput.errors?.['min']">⚠ El valor no puede ser negativo</small>
+              </div>
             </div>
 
             <div class="col-md-6">
@@ -97,22 +116,31 @@
                 type="number"
                 class="form-control"
                 name="valorPersonaAdicional"
-                [(ngModel)]="nuevaTarifa.valorPersonaAdicional">
+                [(ngModel)]="nuevaTarifa.valorPersonaAdicional"
+                #valorAdicionalInput="ngModel"
+                min="0"
+                required>
+              <div *ngIf="valorAdicionalInput.invalid && (valorAdicionalInput.dirty || valorAdicionalInput.touched || tarifaForm.submitted)" class="text-danger mt-1">
+                <small *ngIf="valorAdicionalInput.errors?.['required']">⚠ El valor adicional es obligatorio</small>
+                <small *ngIf="valorAdicionalInput.errors?.['min']">⚠ El valor no puede ser negativo</small>
+              </div>
             </div>
 
           </div>
 
           <div class="d-flex gap-2 mt-4">
 
-            <button type="submit" class="er-btn-primary">
-              <i class="fa-solid fa-floppy-disk"></i>
-              {{ modoEdicion ? 'Actualizar' : 'Guardar' }}
+            <button type="submit" class="er-btn-primary" [disabled]="guardando">
+              <i *ngIf="!guardando" class="fa-solid fa-floppy-disk"></i>
+              <i *ngIf="guardando" class="fa-solid fa-circle-notch fa-spin"></i>
+              {{ guardando ? (modoEdicion ? 'Actualizando...' : 'Guardando...') : (modoEdicion ? 'Actualizar' : 'Guardar') }}
             </button>
 
             <button
               type="button"
               class="er-btn-secondary"
               *ngIf="modoEdicion"
+              [disabled]="guardando"
               (click)="cancelarEdicion()">
               Cancelar
             </button>

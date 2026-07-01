@@ -1,0 +1,16 @@
+<div
+  class="er-loading-backdrop"
+  *ngIf="loading$ | async as loading"
+  [class.show]="loading.visible">
+
+  <div class="er-loading-box" *ngIf="loading.visible">
+
+    <div class="er-spinner"></div>
+
+    <strong>{{ loading.message }}</strong>
+
+    <small>Espere un momento...</small>
+
+  </div>
+
+</div>

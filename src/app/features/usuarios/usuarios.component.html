@@ -97,74 +97,92 @@
           {{ modoEdicion ? 'Editar Usuario' : 'Nuevo Usuario' }}
 
         </h4>
-<div class="row g-3 mt-4">
+        <form #usuarioForm="ngForm" (ngSubmit)="usuarioForm.valid && guardarUsuario()" novalidate>
+          <div class="row g-3 mt-4">
 
-  <div class="col-md-6">
-    <label>Nombre</label>
-    <input class="form-control" [(ngModel)]="nuevoUsuario.nombre">
-  </div>
+            <div class="col-md-6">
+              <label>Nombre</label>
+              <input class="form-control" name="nombre" [(ngModel)]="nuevoUsuario.nombre" #nombreInput="ngModel" required>
+              <div *ngIf="nombreInput.invalid && (nombreInput.dirty || nombreInput.touched || usuarioForm.submitted)" class="text-danger mt-1">
+                <small>⚠ El nombre es obligatorio</small>
+              </div>
+            </div>
 
-  <div class="col-md-6">
-    <label>Apellido</label>
-    <input class="form-control" [(ngModel)]="nuevoUsuario.apellido">
-  </div>
+            <div class="col-md-6">
+              <label>Apellido</label>
+              <input class="form-control" name="apellido" [(ngModel)]="nuevoUsuario.apellido" #apellidoInput="ngModel" required>
+              <div *ngIf="apellidoInput.invalid && (apellidoInput.dirty || apellidoInput.touched || usuarioForm.submitted)" class="text-danger mt-1">
+                <small>⚠ El apellido es obligatorio</small>
+              </div>
+            </div>
 
-  <div class="col-md-12">
-    <label>Correo</label>
-    <input class="form-control" [(ngModel)]="nuevoUsuario.correo">
-  </div>
+            <div class="col-md-12">
+              <label>Correo</label>
+              <input type="email" class="form-control" name="correo" [(ngModel)]="nuevoUsuario.correo" #correoInput="ngModel" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" required>
+              <div *ngIf="correoInput.invalid && (correoInput.dirty || correoInput.touched || usuarioForm.submitted)" class="text-danger mt-1">
+                <small *ngIf="correoInput.errors?.['required']">⚠ El correo es obligatorio</small>
+                <small *ngIf="correoInput.errors?.['pattern']">⚠ El correo no es válido</small>
+              </div>
+            </div>
 
-  <div class="col-md-6">
-    <label>Usuario</label>
-    <input class="form-control" [(ngModel)]="nuevoUsuario.usuario">
-  </div>
+            <div class="col-md-6">
+              <label>Usuario</label>
+              <input class="form-control" name="usuario" [(ngModel)]="nuevoUsuario.usuario" #usuarioInput="ngModel" required>
+              <div *ngIf="usuarioInput.invalid && (usuarioInput.dirty || usuarioInput.touched || usuarioForm.submitted)" class="text-danger mt-1">
+                <small>⚠ El usuario es obligatorio</small>
+              </div>
+            </div>
 
-  <div class="col-md-6" *ngIf="!modoEdicion">
-    <label>Contraseña</label>
-    <input type="password" class="form-control" [(ngModel)]="nuevoUsuario.password">
-  </div>
+            <div class="col-md-6" *ngIf="!modoEdicion">
+              <label>Contraseña</label>
+              <input type="password" class="form-control" name="password" [(ngModel)]="nuevoUsuario.password" #passwordInput="ngModel" required>
+              <div *ngIf="passwordInput.invalid && (passwordInput.dirty || passwordInput.touched || usuarioForm.submitted)" class="text-danger mt-1">
+                <small>⚠ La contraseña es obligatoria</small>
+              </div>
+            </div>
 
-  <div class="col-md-6">
-    <label>Rol</label>
-    <select class="form-select" [(ngModel)]="nuevoUsuario.rol">
-      <option>Administrador</option>
-      <option>Recepción</option>
-      <option>Operador</option>
-      <option>Consulta</option>
-    </select>
-  </div>
+            <div class="col-md-6">
+              <label>Rol</label>
+              <select class="form-select" name="rol" [(ngModel)]="nuevoUsuario.rol">
+                <option>Administrador</option>
+                <option>Recepción</option>
+                <option>Operador</option>
+                <option>Consulta</option>
+              </select>
+            </div>
 
-  <div class="col-md-6">
-    <label>Estado</label>
-    <select class="form-select" [(ngModel)]="nuevoUsuario.estado">
-      <option>Activo</option>
-      <option>Inactivo</option>
-    </select>
-  </div>
-  <div class="mt-4 d-flex gap-2">
+            <div class="col-md-6">
+              <label>Estado</label>
+              <select class="form-select" name="estado" [(ngModel)]="nuevoUsuario.estado">
+                <option>Activo</option>
+                <option>Inactivo</option>
+              </select>
+            </div>
+            
+            <div class="mt-4 d-flex gap-2">
 
-    <button
-        class="er-btn-primary"
-        (click)="guardarUsuario()">
+              <button
+                  type="submit"
+                  class="er-btn-primary"
+                  [disabled]="guardando">
+                  <i *ngIf="!guardando" class="fa-solid fa-floppy-disk"></i>
+                  <i *ngIf="guardando" class="fa-solid fa-circle-notch fa-spin"></i>
+                  {{ guardando ? 'Guardando...' : (modoEdicion ? 'Actualizar' : 'Guardar Usuario') }}
+              </button>
 
-        <i class="fa-solid fa-floppy-disk"></i>
+              <button
+                  *ngIf="modoEdicion"
+                  type="button"
+                  class="er-btn-secondary"
+                  [disabled]="guardando"
+                  (click)="cancelar()">
+                  Cancelar
+              </button>
 
-        {{ modoEdicion ? 'Actualizar' : 'Guardar Usuario' }}
+            </div>
 
-    </button>
-
-    <button
-        *ngIf="modoEdicion"
-        class="er-btn-secondary"
-        (click)="cancelar()">
-
-        Cancelar
-
-    </button>
-
-</div>
-
-</div>
+          </div>
+        </form>
 
       </div>
 
@@ -227,6 +245,7 @@
 
             <button
               class="er-btn-secondary w-100"
+              [disabled]="guardando"
               (click)="editar(usuario)">
 
               Editar
@@ -235,6 +254,7 @@
 
             <button
               class="er-btn-secondary w-100"
+              [disabled]="guardando"
               (click)="eliminar(usuario.id)">
 
               Eliminar

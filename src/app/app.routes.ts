@@ -13,79 +13,100 @@ import { NuevaReservaComponent } from './features/reservas/nueva-reserva/nueva-r
 import { ReportesComponent } from './features/reportes/reportes.component';
 import { ConfiguracionComponent } from './features/configuracion/configuracion.component';
 import { UsuariosComponent } from './features/usuarios/usuarios.component';
+import { NotFoundComponent } from './features/not-found/not-found.component';
 
 export const routes: Routes = [
 
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
+    title: 'Iniciar Sesión | ElectroReserve'
   },
 
   {
     path: '',
     component: LayoutComponent,
     canActivate: [authGuard],
-   children: [
+    children: [
 
-  {
-    path: '',
-    redirectTo: 'dashboard',
-    pathMatch: 'full'
-  },
+      {
+        path: '',
+        redirectTo: 'dashboard',
+        pathMatch: 'full'
+      },
 
-  {
-    path: 'dashboard',
-    component: DashboardComponent
-  },
+      {
+        path: 'dashboard',
+        component: DashboardComponent,
+        title: 'Dashboard | ElectroReserve'
+      },
 
-  {
-    path: 'sitios',
-    component: SitiosComponent
-  },
-  {
-  path: 'alojamientos',
-  component: AlojamientosComponent
-},
-{
-  path: 'temporadas',
-  component: TemporadasComponent
-},
-{
-  path: 'tarifas',
-  component: TarifasComponent
-},
-{
-  path: 'reservas',
-  component: ReservasComponent
-},
-{
-  path: 'reservas/nueva',
-  component: NuevaReservaComponent
-},
-{
-  path: 'reservas/:id',
-  component: ReservaDetalleComponent
-},
-{
-  path: 'reportes',
-  component: ReportesComponent
-},
-{
-  path: 'configuracion',
-  component: ConfiguracionComponent
-},
-{
-  path: 'usuarios',
-  component: UsuariosComponent
-} 
+      {
+        path: 'sitios',
+        component: SitiosComponent,
+        title: 'Sitios | ElectroReserve'
+      },
+      {
+        path: 'alojamientos',
+        component: AlojamientosComponent,
+        title: 'Alojamientos | ElectroReserve'
+      },
+      {
+        path: 'temporadas',
+        component: TemporadasComponent,
+        title: 'Temporadas | ElectroReserve'
+      },
+      {
+        path: 'tarifas',
+        component: TarifasComponent,
+        title: 'Tarifas | ElectroReserve'
+      },
+      {
+        path: 'reservas',
+        component: ReservasComponent,
+        title: 'Reservas | ElectroReserve'
+      },
+      {
+        path: 'reservas/nueva',
+        component: NuevaReservaComponent,
+        title: 'Nueva Reserva | ElectroReserve'
+      },
+      {
+        path: 'reservas/:id',
+        component: ReservaDetalleComponent,
+        title: 'Detalle de Reserva | ElectroReserve'
+      },
+      {
+        path: 'reportes',
+        component: ReportesComponent,
+        title: 'Reportes | ElectroReserve'
+      },
+      {
+        path: 'configuracion',
+        component: ConfiguracionComponent,
+        title: 'Configuración | ElectroReserve'
+      },
+      {
+        path: 'usuarios',
+        component: UsuariosComponent,
+        title: 'Usuarios | ElectroReserve'
+      },
+      {
+        path: '404',
+        component: NotFoundComponent,
+        title: '404 No Encontrado | ElectroReserve'
+      },
+      {
+        path: '**',
+        redirectTo: '404'
+      }
 
-]
+    ]
   },
 
   {
     path: '**',
     redirectTo: 'login'
-  },
-  
+  }
 
 ];
